@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nou Volei Alzira - Control de Asistencia y Entrenamientos</title>
+
+  <!-- Librerías externas para Generación de PDF y Gráficos -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     :root {
       --primary: #1e3a8a;
@@ -175,6 +180,16 @@
       background-color: #dc2626;
     }
 
+    .btn-pdf {
+      background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+      color: white;
+    }
+
+    .btn-pdf:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
     .btn-sm {
       padding: 0.4rem 0.8rem;
       font-size: 0.875rem;
@@ -271,7 +286,7 @@
       font-size: 0.9rem;
     }
 
-    input[type="date"], input[type="text"] {
+    input[type="date"], input[type="text"], select {
       padding: 0.5rem 0.75rem;
       border: 1px solid var(--border);
       border-radius: 6px;
@@ -279,7 +294,7 @@
       outline: none;
     }
 
-    input[type="date"]:focus, input[type="text"]:focus {
+    input[type="date"]:focus, input[type="text"]:focus, select:focus {
       border-color: var(--primary-light);
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
     }
@@ -441,7 +456,7 @@
       border-radius: var(--radius);
       padding: 1.5rem;
       width: 90%;
-      max-width: 400px;
+      max-width: 420px;
       box-shadow: var(--shadow);
     }
 
@@ -475,6 +490,13 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .logs-actions {
+      display: flex;
+      gap: 0.5rem;
     }
 
     .logs-list {
@@ -514,6 +536,126 @@
     .hidden-input {
       display: none;
     }
+
+    /* Estilos para la Plantilla del PDF */
+    #pdfTemplateContainer {
+      position: absolute;
+      left: -9999px;
+      top: -9999px;
+      width: 800px;
+      background: #ffffff;
+      color: #1e293b;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .pdf-render-box {
+      padding: 30px;
+      background: #ffffff;
+    }
+
+    .pdf-header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: white;
+      padding: 24px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pdf-header::after {
+      content: '🏐';
+      position: absolute;
+      right: 20px;
+      bottom: -10px;
+      font-size: 80px;
+      opacity: 0.15;
+    }
+
+    .pdf-header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .pdf-header p {
+      font-size: 14px;
+      color: #dbeafe;
+    }
+
+    .pdf-meta {
+      display: flex;
+      justify-content: space-between;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 20px;
+      margin-bottom: 24px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .pdf-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid #eff6ff;
+      padding-bottom: 6px;
+    }
+
+    .pdf-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 28px;
+      font-size: 12px;
+    }
+
+    .pdf-table th {
+      background-color: #3b82f6;
+      color: white;
+      text-align: left;
+      padding: 10px 12px;
+      font-weight: 700;
+    }
+
+    .pdf-table th:first-child { border-top-left-radius: 8px; }
+    .pdf-table th:last-child { border-top-right-radius: 8px; }
+
+    .pdf-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .pdf-table tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    .pdf-charts-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .pdf-chart-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .pdf-chart-card h4 {
+      font-size: 13px;
+      text-align: center;
+      color: #334155;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -545,7 +687,10 @@
     <section class="logs-section">
       <div class="logs-header">
         <h3>Histórico de Sesiones Registradas</h3>
-        <button class="btn btn-secondary btn-sm" onclick="exportLogsToTxt()">📥 Descargar Histórico (.txt)</button>
+        <div class="logs-actions">
+          <button class="btn btn-pdf btn-sm" onclick="openPdfDateModal()">📄 Generar Informe PDF</button>
+          <button class="btn btn-secondary btn-sm" onclick="exportLogsToTxt()">📥 Descargar Histórico (.txt)</button>
+        </div>
       </div>
       <div class="logs-list" id="logsContainer">
         <div class="log-item" style="color: #94a3b8;">No hay sesiones guardadas en esta sesión.</div>
@@ -622,11 +767,89 @@
     </div>
   </div>
 
+  <!-- Submodal para Selección de Fechas para el PDF -->
+  <div class="submodal-overlay" id="pdfDateModal">
+    <div class="submodal-card">
+      <h4>Generar Informe PDF</h4>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Selecciona el rango de fechas y equipo para filtrar el historial de entrenamientos.</p>
+      
+      <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem;">
+        <div>
+          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Equipo:</label>
+          <select id="pdfTeamFilter" style="width: 100%;">
+            <option value="ALL">Todos los Equipos</option>
+            <option value="Infantil">Infantil</option>
+            <option value="Cadete">Cadete</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Fecha Inicio:</label>
+          <input type="date" id="pdfStartDate" style="width: 100%;">
+        </div>
+        <div>
+          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Fecha Fin:</label>
+          <input type="date" id="pdfEndDate" style="width: 100%;">
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+        <button class="btn btn-secondary btn-sm" onclick="closePdfDateModal()">Cancelar</button>
+        <button class="btn btn-pdf btn-sm" onclick="generatePDF()">🚀 Descargar PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor Oculto para Generación del PDF -->
+  <div id="pdfTemplateContainer">
+    <div class="pdf-render-box" id="pdfRenderArea">
+      <div class="pdf-header">
+        <h1 id="pdfTitleDisplay">Informe de Rendimiento y Asistencia</h1>
+        <p>Club Nou Volei Alzira • Resumen para Familias</p>
+      </div>
+
+      <div class="pdf-meta">
+        <div><strong>Equipo:</strong> <span id="pdfTeamDisplay">-</span></div>
+        <div><strong>Fecha Inicio:</strong> <span id="pdfStartDisplay">-</span></div>
+        <div><strong>Fecha Fin:</strong> <span id="pdfEndDisplay">-</span></div>
+      </div>
+
+      <div class="pdf-section-title">📊 Estadísticas Individuales de Jugadoras</div>
+      <table class="pdf-table">
+        <thead>
+          <tr>
+            <th>Jugadora</th>
+            <th style="text-align: center;">Asistencia</th>
+            <th style="text-align: center;">Media Calidad</th>
+            <th style="text-align: center;">Total Strikes</th>
+          </tr>
+        </thead>
+        <tbody id="pdfTableBody">
+        </tbody>
+      </table>
+
+      <div class="pdf-section-title" style="margin-top: 20px;">📈 Análisis General del Periodo</div>
+      <div class="pdf-charts-container">
+        <div class="pdf-chart-card">
+          <h4>Asistencia (Jugadoras por Día)</h4>
+          <canvas id="pdfAttendanceChart" width="320" height="200"></canvas>
+        </div>
+        <div class="pdf-chart-card">
+          <h4>Media de Calidad del Entrenamiento (★)</h4>
+          <canvas id="pdfQualityChart" width="320" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     let currentCategory = '';
     let playersData = [];
     let activeJustificationIndex = null;
     let globalLogs = [];
+
+    // Instancias globales para gráficos
+    let attChartInstance = null;
+    let qualChartInstance = null;
 
     const defaultRosters = {
       Infantil: [
@@ -991,6 +1214,192 @@
           '"': '&quot;',
           "'": '&#039;'
         }[m];
+      });
+    }
+
+    /* ==========================================================
+       NUEVAS FUNCIONES: GENERACIÓN DE INFORME PDF
+       ========================================================== */
+
+    function openPdfDateModal() {
+      if (globalLogs.length === 0) {
+        alert('No hay registros de entrenamiento guardados en el historial para generar el informe.');
+        return;
+      }
+
+      // Ordenar logs para inferir fechas por defecto
+      const sortedLogs = [...globalLogs].sort((a, b) => new Date(a.date) - new Date(b.date));
+      document.getElementById('pdfStartDate').value = sortedLogs[0].date;
+      document.getElementById('pdfEndDate').value = sortedLogs[sortedLogs.length - 1].date;
+
+      document.getElementById('pdfDateModal').classList.add('active');
+    }
+
+    function closePdfDateModal() {
+      document.getElementById('pdfDateModal').classList.remove('active');
+    }
+
+    function generatePDF() {
+      const teamFilter = document.getElementById('pdfTeamFilter').value;
+      const startDate = document.getElementById('pdfStartDate').value;
+      const endDate = document.getElementById('pdfEndDate').value;
+
+      if (!startDate || !endDate) {
+        alert('Por favor selecciona las fechas de inicio y fin.');
+        return;
+      }
+
+      if (new Date(startDate) > new Date(endDate)) {
+        alert('La fecha de inicio no puede ser posterior a la fecha fin.');
+        return;
+      }
+
+      // Filtrar entrenamientos en el rango de fechas e iteración de categoría
+      const filteredLogs = globalLogs.filter(log => {
+        const matchesTeam = teamFilter === 'ALL' || log.category === teamFilter;
+        const matchesDate = log.date >= startDate && log.date <= endDate;
+        return matchesTeam && matchesDate;
+      }).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      if (filteredLogs.length === 0) {
+        alert('No se encontraron entrenamientos registrados en el rango de fechas y equipo seleccionado.');
+        return;
+      }
+
+      // 1. Cabecera y Metadatos
+      document.getElementById('pdfTeamDisplay').textContent = teamFilter === 'ALL' ? 'Todos los Equipos' : `Equipo ${teamFilter}`;
+      document.getElementById('pdfStartDisplay').textContent = startDate;
+      document.getElementById('pdfEndDisplay').textContent = endDate;
+
+      // 2. Procesar Datos por Jugadora
+      const totalSessions = filteredLogs.length;
+      const playerStats = {};
+
+      filteredLogs.forEach(log => {
+        log.records.forEach(r => {
+          if (!playerStats[r.name]) {
+            playerStats[r.name] = {
+              attendances: 0,
+              totalRating: 0,
+              ratingCount: 0,
+              totalStrikes: 0
+            };
+          }
+
+          if (r.attendance === 'V') {
+            playerStats[r.name].attendances += 1;
+          }
+
+          if (r.rating !== undefined && r.rating !== null) {
+            playerStats[r.name].totalRating += Number(r.rating);
+            playerStats[r.name].ratingCount += 1;
+          }
+
+          if (r.strikes) {
+            playerStats[r.name].totalStrikes += Number(r.strikes);
+          }
+        });
+      });
+
+      // Renderizar Tabla
+      const pdfTbody = document.getElementById('pdfTableBody');
+      pdfTbody.innerHTML = '';
+
+      Object.keys(playerStats).sort().forEach(pName => {
+        const stats = playerStats[pName];
+        const avgRating = stats.ratingCount > 0 ? (stats.totalRating / stats.ratingCount).toFixed(1) : '0.0';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${escapeHtml(pName)}</strong></td>
+          <td style="text-align: center;"><strong>${stats.attendances}</strong> / ${totalSessions}</td>
+          <td style="text-align: center; color: #d97706;">★ ${avgRating}</td>
+          <td style="text-align: center; color: ${stats.totalStrikes > 0 ? '#dc2626' : '#64748b'};">
+            ${stats.totalStrikes > 0 ? '❌ '.repeat(stats.totalStrikes) : '0'}
+          </td>
+        `;
+        pdfTbody.appendChild(tr);
+      });
+
+      // 3. Procesar Datos para los Gráficos
+      const dateLabels = filteredLogs.map(l => l.date);
+      const attendanceData = filteredLogs.map(l => l.records.filter(r => r.attendance === 'V').length);
+      const qualityData = filteredLogs.map(l => {
+        const validRatings = l.records.map(r => Number(r.rating) || 0);
+        const sum = validRatings.reduce((acc, curr) => acc + curr, 0);
+        return validRatings.length > 0 ? (sum / validRatings.length).toFixed(1) : 0;
+      });
+
+      // Renderizar Gráficos con Chart.js
+      renderPdfCharts(dateLabels, attendanceData, qualityData);
+
+      // Esperar breve renderizado de canvas
+      setTimeout(() => {
+        const element = document.getElementById('pdfRenderArea');
+        const opt = {
+          margin:       0.3,
+          filename:     `Informe_Entrenamientos_NouVoleiAlzira_${startDate}_${endDate}.pdf`,
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas:  { scale: 2, useCORS: true, logging: false },
+          jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save().then(() => {
+          closePdfDateModal();
+        });
+      }, 500);
+    }
+
+    function renderPdfCharts(labels, attendanceData, qualityData) {
+      if (attChartInstance) attChartInstance.destroy();
+      if (qualChartInstance) qualChartInstance.destroy();
+
+      const ctxAtt = document.getElementById('pdfAttendanceChart').getContext('2d');
+      attChartInstance = new Chart(ctxAtt, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Jugadoras Presentes',
+            data: attendanceData,
+            backgroundColor: '#3b82f6',
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: false,
+          animation: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { precision: 0 } }
+          }
+        }
+      });
+
+      const ctxQual = document.getElementById('pdfQualityChart').getContext('2d');
+      qualChartInstance = new Chart(ctxQual, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Media Estrellas',
+            data: qualityData,
+            borderColor: '#f59e0b',
+            backgroundColor: 'rgba(245, 158, 11, 0.15)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointBackgroundColor: '#f59e0b'
+          }]
+        },
+        options: {
+          responsive: false,
+          animation: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { min: 0, max: 5, ticks: { stepSize: 1 } }
+          }
+        }
       });
     }
   </script>
