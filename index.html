@@ -35,7 +35,6 @@
       flex-direction: column;
     }
 
-    /* Header Styling */
     header {
       background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
       color: white;
@@ -56,7 +55,6 @@
       font-size: 1.1rem;
     }
 
-    /* Main Container */
     main {
       flex: 1;
       max-width: 1200px;
@@ -72,10 +70,9 @@
       font-size: 1.2rem;
     }
 
-    /* Team Selection Grid */
     .teams-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1rem));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 2rem;
       justify-content: center;
       max-width: 800px;
@@ -183,7 +180,6 @@
       font-size: 0.875rem;
     }
 
-    /* Modal Overlay */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -294,7 +290,6 @@
       flex: 1;
     }
 
-    /* Roster Control Bar */
     .roster-actions {
       display: flex;
       gap: 0.5rem;
@@ -302,7 +297,6 @@
       flex-wrap: wrap;
     }
 
-    /* Attendance Table */
     .table-responsive {
       width: 100%;
       overflow-x: auto;
@@ -334,14 +328,12 @@
       background-color: #f8fafc;
     }
 
-    /* Column Widths & Specifics */
     .col-name { min-width: 180px; }
     .col-att { min-width: 130px; text-align: center; }
     .col-rating { min-width: 140px; text-align: center; }
     .col-strikes { min-width: 120px; text-align: center; }
     .col-comment { min-width: 200px; }
 
-    /* Attendance Toggle Buttons */
     .att-toggle {
       display: inline-flex;
       border-radius: 6px;
@@ -369,7 +361,6 @@
       color: white;
     }
 
-    /* Star Rating */
     .star-rating {
       display: inline-flex;
       gap: 2px;
@@ -386,7 +377,6 @@
       color: var(--accent);
     }
 
-    /* Strikes Toggle */
     .strikes-container {
       display: inline-flex;
       gap: 4px;
@@ -414,7 +404,6 @@
       color: var(--danger);
     }
 
-    /* Modal Footer */
     .modal-footer {
       padding: 1rem 1.5rem;
       background: #f8fafc;
@@ -426,7 +415,6 @@
       flex-wrap: wrap;
     }
 
-    /* Sub-Modal (Justification) */
     .submodal-overlay {
       position: fixed;
       top: 0;
@@ -473,7 +461,6 @@
       font-family: inherit;
     }
 
-    /* Logs Section */
     .logs-section {
       background: var(--card-bg);
       border-radius: var(--radius);
@@ -524,7 +511,6 @@
     .badge-infantil { background: #dbeafe; color: #1e40af; }
     .badge-cadete { background: #fef3c7; color: #92400e; }
 
-    /* Hidden File Inputs */
     .hidden-input {
       display: none;
     }
@@ -541,24 +527,21 @@
     <p class="selector-title">Selecciona una categoría para comenzar el registro</p>
     
     <div class="teams-grid">
-      <!-- Infantil Card -->
       <div class="team-card" onclick="openAttendanceModal('Infantil')">
         <div class="team-icon">🏐</div>
         <h2>Infantil</h2>
         <p>Equipo Infantil Femenino / Masculino</p>
-        <button class="btn btn-primary">Abrir Registro</button>
+        <button class="btn btn-primary" type="button">Abrir Registro</button>
       </div>
 
-      <!-- Cadete Card -->
       <div class="team-card" onclick="openAttendanceModal('Cadete')">
         <div class="team-icon">🏐</div>
         <h2>Cadete</h2>
         <p>Equipo Cadete Femenino / Masculino</p>
-        <button class="btn btn-primary">Abrir Registro</button>
+        <button class="btn btn-primary" type="button">Abrir Registro</button>
       </div>
     </div>
 
-    <!-- Registro / Log Visualizador -->
     <section class="logs-section">
       <div class="logs-header">
         <h3>Histórico de Sesiones Registradas</h3>
@@ -570,17 +553,14 @@
     </section>
   </main>
 
-  <!-- Modal Principal de Asistencia -->
   <div class="modal-overlay" id="attendanceModal">
     <div class="modal-container">
       
-      <!-- Header Modal -->
       <div class="modal-header">
         <h3 id="modalTitle">Registro de Entrenamiento - Equipo</h3>
         <button class="close-btn" onclick="closeAttendanceModal()">&times;</button>
       </div>
 
-      <!-- Toolbar -->
       <div class="modal-toolbar">
         <div class="date-picker-group">
           <label for="sessionDate">Día del Entrenamiento:</label>
@@ -594,7 +574,6 @@
         </div>
       </div>
 
-      <!-- Body / Tabla -->
       <div class="modal-body">
         <div class="table-responsive">
           <table>
@@ -619,13 +598,11 @@
               </tr>
             </thead>
             <tbody id="playerTableBody">
-              <!-- Renderizado dinámico -->
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Footer Modal -->
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeAttendanceModal()">Cancelar</button>
         <button class="btn btn-success" onclick="saveSession()">💾 Registrar Entrenamiento</button>
@@ -634,7 +611,6 @@
     </div>
   </div>
 
-  <!-- Submodal Justificación -->
   <div class="submodal-overlay" id="justificationModal">
     <div class="submodal-card">
       <h4 id="justificationPlayerName">Justificación de Falta</h4>
@@ -647,15 +623,11 @@
   </div>
 
   <script>
-    /* ==========================================================================
-       ESTADO DE LA APLICACIÓN
-       ========================================================================== */
-    let currentCategory = ''; // 'Infantil' o 'Cadete'
-    let playersData = [];     // Lista de objetos jugadora de la categoría actual
+    let currentCategory = '';
+    let playersData = [];
     let activeJustificationIndex = null;
     let globalLogs = [];
 
-    // Listas por defecto si no existen en localStorage
     const defaultRosters = {
       Infantil: [
         "Paula Giménez", "Lucía Martínez", "Alba Ferrando", "Sofia Peris", 
@@ -667,44 +639,42 @@
       ]
     };
 
-    /* ==========================================================================
-       INICIALIZACIÓN
-       ========================================================================== */
     document.addEventListener('DOMContentLoaded', () => {
-      // Establecer fecha por defecto a HOY
       const today = new Date().toISOString().split('T')[0];
       document.getElementById('sessionDate').value = today;
 
-      // Cargar logs guardados si existen
       const savedLogs = localStorage.getItem('nva_logs');
       if (savedLogs) {
-        globalLogs = JSON.parse(savedLogs);
-        renderLogs();
+        try {
+          globalLogs = JSON.parse(savedLogs);
+          renderLogs();
+        } catch(e) {
+          console.error("Error cargando logs", e);
+        }
       }
     });
 
-    /* ==========================================================================
-       GESTIÓN DE MÓDALES Y DATOS DE JUGADORAS
-       ========================================================================== */
     function openAttendanceModal(category) {
       currentCategory = category;
       document.getElementById('modalTitle').textContent = `Registro de Entrenamiento - Equipo ${category}`;
       
-      // Cargar lista de jugadoras de localStorage o default
       const savedRoster = localStorage.getItem(`nva_roster_${category}`);
       let playerNames = [];
       if (savedRoster) {
-        playerNames = JSON.parse(savedRoster);
+        try {
+          playerNames = JSON.parse(savedRoster);
+        } catch(e) {
+          playerNames = defaultRosters[category] || [];
+        }
       } else {
         playerNames = defaultRosters[category] || [];
       }
 
-      // Estructurar array de objetos para el estado del formulario
       playersData = playerNames.map(name => ({
         name: name,
-        attendance: 'V', // 'V' | 'X' | null
-        rating: 5,       // 0 a 5
-        strikes: 0,      // 0 a 3
+        attendance: 'V',
+        rating: 5,
+        strikes: 0,
         comment: ''
       }));
 
@@ -716,9 +686,6 @@
       document.getElementById('attendanceModal').classList.remove('active');
     }
 
-    /* ==========================================================================
-       RENDERIZADO DE LA TABLA
-       ========================================================================== */
     function renderTable() {
       const tbody = document.getElementById('playerTableBody');
       tbody.innerHTML = '';
@@ -726,35 +693,30 @@
       playersData.forEach((player, idx) => {
         const tr = document.createElement('tr');
 
-        // Columna Nombre
         const tdName = document.createElement('td');
         tdName.innerHTML = `<strong style="cursor:pointer;" onclick="editPlayerName(${idx})" title="Haz clic para editar">${escapeHtml(player.name)}</strong>`;
         tr.appendChild(tdName);
 
-        // Columna Asistencia
         const tdAtt = document.createElement('td');
         tdAtt.className = 'col-att';
         tdAtt.innerHTML = `
           <div class="att-toggle">
-            <button class="att-btn ${player.attendance === 'V' ? 'active-v' : ''}" onclick="setAttendance(${idx}, 'V')">V</button>
-            <button class="att-btn ${player.attendance === 'X' ? 'active-x' : ''}" onclick="setAttendance(${idx}, 'X')">X</button>
+            <button type="button" class="att-btn ${player.attendance === 'V' ? 'active-v' : ''}" onclick="setAttendance(${idx}, 'V')">V</button>
+            <button type="button" class="att-btn ${player.attendance === 'X' ? 'active-x' : ''}" onclick="setAttendance(${idx}, 'X')">X</button>
           </div>
         `;
         tr.appendChild(tdAtt);
 
-        // Columna Valoración (Estrellas 0 a 5)
         const tdRating = document.createElement('td');
         tdRating.className = 'col-rating';
         tdRating.appendChild(createStarRating(idx, player.rating));
         tr.appendChild(tdRating);
 
-        // Columna Strikes (3 X)
         const tdStrikes = document.createElement('td');
         tdStrikes.className = 'col-strikes';
         tdStrikes.appendChild(createStrikeSelector(idx, player.strikes));
         tr.appendChild(tdStrikes);
 
-        // Columna Comentarios
         const tdComment = document.createElement('td');
         tdComment.className = 'col-comment';
         tdComment.innerHTML = `
@@ -765,18 +727,14 @@
         `;
         tr.appendChild(tdComment);
 
-        // Columna Eliminar
         const tdAction = document.createElement('td');
-        tdAction.innerHTML = `<button style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:1.1rem;" onclick="removePlayer(${idx})" title="Eliminar jugadora">&times;</button>`;
+        tdAction.innerHTML = `<button type="button" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:1.1rem;" onclick="removePlayer(${idx})" title="Eliminar jugadora">&times;</button>`;
         tr.appendChild(tdAction);
 
         tbody.appendChild(tr);
       });
     }
 
-    /* ==========================================================================
-       COMPONENTES INTERACTIVOS DE LA TABLA
-       ========================================================================== */
     function createStarRating(playerIdx, currentRating) {
       const container = document.createElement('div');
       container.className = 'star-rating';
@@ -786,7 +744,6 @@
         star.className = `star ${i <= currentRating ? 'filled' : ''}`;
         star.innerHTML = '★';
         star.onclick = () => {
-          // Si pulsa la misma estrella que ya tiene, se resetea a 0 estrellas
           playersData[playerIdx].rating = (playersData[playerIdx].rating === i) ? 0 : i;
           renderTable();
         };
@@ -812,9 +769,6 @@
       return container;
     }
 
-    /* ==========================================================================
-       ACCIONES Y MANEJO DE EVENTOS DE JUGADORAS
-       ========================================================================== */
     function setAttendance(idx, status) {
       playersData[idx].attendance = status;
       if (status === 'X') {
@@ -860,9 +814,6 @@
       }
     }
 
-    /* ==========================================================================
-       ACCIONES EN MASA (CABECERA)
-       ========================================================================== */
     function bulkSetAttendance(status) {
       playersData.forEach(p => p.attendance = status);
       renderTable();
@@ -878,9 +829,6 @@
       renderTable();
     }
 
-    /* ==========================================================================
-       SUBMODAL JUSTIFICACIÓN
-       ========================================================================== */
     function openJustificationModal(idx) {
       activeJustificationIndex = idx;
       document.getElementById('justificationPlayerName').textContent = `Justificación para ${playersData[idx].name}`;
@@ -897,9 +845,6 @@
       renderTable();
     }
 
-    /* ==========================================================================
-       PERSISTENCIA DE PLANTILLA EN ARCHIVO .TXT Y LOCALSTORAGE
-       ========================================================================== */
     function saveCurrentRosterToLocalStorage() {
       const names = playersData.map(p => p.name);
       localStorage.setItem(`nva_roster_${currentCategory}`, JSON.stringify(names));
@@ -907,8 +852,7 @@
 
     function exportRosterTxt() {
       saveCurrentRosterToLocalStorage();
-      const names = playersData.map(p => p.name).join('
-');
+      const names = playersData.map(p => p.name).join('\n');
       downloadFile(`${currentCategory}_Plantilla_NouVoleiAlzira.txt`, names);
     }
 
@@ -923,8 +867,7 @@
       const reader = new FileReader();
       reader.onload = function(e) {
         const content = e.target.result;
-        const names = content.split(/?
-/).map(n => n.trim()).filter(n => n.length > 0);
+        const names = content.split(/\r?\n/).map(n => n.trim()).filter(n => n.length > 0);
         
         if (names.length > 0) {
           playersData = names.map(name => ({
@@ -942,12 +885,9 @@
         }
       };
       reader.readAsText(file);
-      event.target.value = ''; // Reset
+      event.target.value = '';
     }
 
-    /* ==========================================================================
-       REGISTRO DE ENTRENAMIENTOS (LOGS Y DESCARGA DE HISTÓRICO)
-       ========================================================================== */
     function saveSession() {
       const dateVal = document.getElementById('sessionDate').value;
       if (!dateVal) {
@@ -971,7 +911,6 @@
       globalLogs.unshift(sessionRecord);
       localStorage.setItem('nva_logs', JSON.stringify(globalLogs));
       
-      // Auto-guardado de lista
       saveCurrentRosterToLocalStorage();
 
       renderLogs();
@@ -1009,23 +948,15 @@
         return;
       }
 
-      let textContent = "====================================================
-";
-      textContent += "    CLUB NOU VOLEI ALZIRA - REGISTRO DE ENTRENAMIENTOS   
-";
-      textContent += "====================================================
+      let textContent = "====================================================\n";
+      textContent += "    CLUB NOU VOLEI ALZIRA - REGISTRO DE ENTRENAMIENTOS   \n";
+      textContent += "====================================================\n\n";
 
-";
-
-      globalLogs.forEach((log, index) => {
-        textContent += `FECHA: ${log.date}  | EQUIPO: ${log.category.toUpperCase()}
-`;
-        textContent += `----------------------------------------------------
-`;
-        textContent += `JUGADORA             | ASIST. | CALIF. | STRIKES | COMENTARIOS
-`;
-        textContent += `----------------------------------------------------
-`;
+      globalLogs.forEach((log) => {
+        textContent += `FECHA: ${log.date}  | EQUIPO: ${log.category.toUpperCase()}\n`;
+        textContent += `----------------------------------------------------\n`;
+        textContent += `JUGADORA             | ASIST. | CALIF. | STRIKES | COMENTARIOS\n`;
+        textContent += `----------------------------------------------------\n`;
         
         log.records.forEach(r => {
           const namePad = r.name.padEnd(20, ' ');
@@ -1033,20 +964,14 @@
           const ratPad = (`${r.rating}★`).padEnd(6, ' ');
           const strPad = (`${r.strikes} X`).padEnd(7, ' ');
           const comm = r.comment || '';
-          textContent += `${namePad} | ${attPad} | ${ratPad} | ${strPad} | ${comm}
-`;
+          textContent += `${namePad} | ${attPad} | ${ratPad} | ${strPad} | ${comm}\n`;
         });
-        textContent += "
-
-";
+        textContent += "\n\n";
       });
 
-      downloadFile("Histórico_Entrenamientos_NouVoleiAlzira.txt", textContent);
+      downloadFile("Historico_Entrenamientos_NouVoleiAlzira.txt", textContent);
     }
 
-    /* ==========================================================================
-       UTILIDADES
-       ========================================================================== */
     function downloadFile(filename, text) {
       const element = document.createElement('a');
       element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
