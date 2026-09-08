@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nou Volei Alzira - Control de Asistencia y Entrenamientos</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #3b82f6;
+      --accent: #f59e0b;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --danger: #ef4444;
+      --shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header Styling */
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+      color: white;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: #93c5fd;
+      font-size: 1.1rem;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .selector-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+    }
+
+    /* Team Selection Grid */
+    .teams-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1rem));
+      gap: 2rem;
+      justify-content: center;
+      max-width: 800px;
+      margin: 0 auto 3rem auto;
+    }
+
+    .team-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .team-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+      border-color: var(--primary-light);
+    }
+
+    .team-icon {
+      width: 64px;
+      height: 64px;
+      background: #eff6ff;
+      color: var(--primary-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .team-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .team-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-light);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary);
+    }
+
+    .btn-secondary {
+      background-color: #f1f5f9;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background-color: #e2e8f0;
+    }
+
+    .btn-success {
+      background-color: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background-color: #059669;
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #dc2626;
+    }
+
+    .btn-sm {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.875rem;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-container {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 1100px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      animation: modalSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalSlide {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h3 {
+      font-size: 1.3rem;
+      color: var(--primary);
+    }
+
+    .close-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      line-height: 1;
+    }
+
+    .close-btn:hover {
+      color: var(--text);
+    }
+
+    .modal-toolbar {
+      padding: 1rem 1.5rem;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .date-picker-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .date-picker-group label {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    input[type="date"], input[type="text"] {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    input[type="date"]:focus, input[type="text"]:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* Roster Control Bar */
+    .roster-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    /* Attendance Table */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 0.85rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    th {
+      background: #f1f5f9;
+      font-weight: 700;
+      color: var(--text);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    tr:hover {
+      background-color: #f8fafc;
+    }
+
+    /* Column Widths & Specifics */
+    .col-name { min-width: 180px; }
+    .col-att { min-width: 130px; text-align: center; }
+    .col-rating { min-width: 140px; text-align: center; }
+    .col-strikes { min-width: 120px; text-align: center; }
+    .col-comment { min-width: 200px; }
+
+    /* Attendance Toggle Buttons */
+    .att-toggle {
+      display: inline-flex;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .att-btn {
+      padding: 0.4rem 0.8rem;
+      border: none;
+      background: white;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: background 0.15s;
+    }
+
+    .att-btn.active-v {
+      background-color: var(--success);
+      color: white;
+    }
+
+    .att-btn.active-x {
+      background-color: var(--danger);
+      color: white;
+    }
+
+    /* Star Rating */
+    .star-rating {
+      display: inline-flex;
+      gap: 2px;
+      cursor: pointer;
+    }
+
+    .star {
+      font-size: 1.2rem;
+      color: #cbd5e1;
+      transition: color 0.15s;
+    }
+
+    .star.filled {
+      color: var(--accent);
+    }
+
+    /* Strikes Toggle */
+    .strikes-container {
+      display: inline-flex;
+      gap: 4px;
+    }
+
+    .strike-box {
+      width: 26px;
+      height: 26px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.8rem;
+      cursor: pointer;
+      user-select: none;
+      background: white;
+      color: var(--text-muted);
+    }
+
+    .strike-box.active {
+      background: #fef2f2;
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    /* Modal Footer */
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Sub-Modal (Justification) */
+    .submodal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .submodal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .submodal-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: var(--shadow);
+    }
+
+    .submodal-card h4 {
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+
+    .submodal-card textarea {
+      width: 100%;
+      height: 80px;
+      padding: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      resize: none;
+      margin-bottom: 1rem;
+      font-family: inherit;
+    }
+
+    /* Logs Section */
+    .logs-section {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-top: 1rem;
+    }
+
+    .logs-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .logs-list {
+      max-height: 250px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #f8fafc;
+      padding: 0.5rem;
+    }
+
+    .log-item {
+      font-size: 0.875rem;
+      padding: 0.4rem 0.6rem;
+      border-bottom: 1px solid var(--border);
+      font-family: monospace;
+      color: #334155;
+    }
+
+    .log-item:last-child {
+      border-bottom: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-right: 0.4rem;
+    }
+
+    .badge-infantil { background: #dbeafe; color: #1e40af; }
+    .badge-cadete { background: #fef3c7; color: #92400e; }
+
+    /* Hidden File Inputs */
+    .hidden-input {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Nou Volei Alzira</h1>
+    <p>Gestión de Asistencia y Rendimiento de Entrenamientos</p>
+  </header>
+
+  <main>
+    <p class="selector-title">Selecciona una categoría para comenzar el registro</p>
+    
+    <div class="teams-grid">
+      <!-- Infantil Card -->
+      <div class="team-card" onclick="openAttendanceModal('Infantil')">
+        <div class="team-icon">🏐</div>
+        <h2>Infantil</h2>
+        <p>Equipo Infantil Femenino / Masculino</p>
+        <button class="btn btn-primary">Abrir Registro</button>
+      </div>
+
+      <!-- Cadete Card -->
+      <div class="team-card" onclick="openAttendanceModal('Cadete')">
+        <div class="team-icon">🏐</div>
+        <h2>Cadete</h2>
+        <p>Equipo Cadete Femenino / Masculino</p>
+        <button class="btn btn-primary">Abrir Registro</button>
+      </div>
+    </div>
+
+    <!-- Registro / Log Visualizador -->
+    <section class="logs-section">
+      <div class="logs-header">
+        <h3>Histórico de Sesiones Registradas</h3>
+        <button class="btn btn-secondary btn-sm" onclick="exportLogsToTxt()">📥 Descargar Histórico (.txt)</button>
+      </div>
+      <div class="logs-list" id="logsContainer">
+        <div class="log-item" style="color: #94a3b8;">No hay sesiones guardadas en esta sesión.</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal Principal de Asistencia -->
+  <div class="modal-overlay" id="attendanceModal">
+    <div class="modal-container">
+      
+      <!-- Header Modal -->
+      <div class="modal-header">
+        <h3 id="modalTitle">Registro de Entrenamiento - Equipo</h3>
+        <button class="close-btn" onclick="closeAttendanceModal()">&times;</button>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="modal-toolbar">
+        <div class="date-picker-group">
+          <label for="sessionDate">Día del Entrenamiento:</label>
+          <input type="date" id="sessionDate">
+        </div>
+        <div class="roster-actions">
+          <button class="btn btn-secondary btn-sm" onclick="promptAddPlayer()">➕ Añadir Jugadora</button>
+          <button class="btn btn-secondary btn-sm" onclick="triggerLoadTxt()">📂 Cargar Lista TXT</button>
+          <button class="btn btn-secondary btn-sm" onclick="exportRosterTxt()">💾 Guardar Lista TXT</button>
+          <input type="file" id="txtFileInput" class="hidden-input" accept=".txt" onchange="handleTxtFile(event)">
+        </div>
+      </div>
+
+      <!-- Body / Tabla -->
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th class="col-name">Jugadora</th>
+                <th class="col-att">
+                  Asistencia<br>
+                  <span style="font-weight:normal; font-size: 0.8rem; cursor:pointer; color:var(--primary-light)" onclick="bulkSetAttendance('V')">[Todos V]</span>
+                  <span style="font-weight:normal; font-size: 0.8rem; cursor:pointer; color:var(--danger)" onclick="bulkSetAttendance('X')">[Todos X]</span>
+                </th>
+                <th class="col-rating">
+                  Calidad (0-5★)<br>
+                  <span style="font-weight:normal; font-size: 0.8rem; cursor:pointer; color:var(--accent)" onclick="bulkSetRating(5)">[Todas 5★]</span>
+                </th>
+                <th class="col-strikes">
+                  Strikes<br>
+                  <span style="font-weight:normal; font-size: 0.8rem; cursor:pointer; color:var(--text-muted)" onclick="bulkClearStrikes()">[Reset]</span>
+                </th>
+                <th class="col-comment">Comentarios / Justificación</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="playerTableBody">
+              <!-- Renderizado dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Footer Modal -->
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeAttendanceModal()">Cancelar</button>
+        <button class="btn btn-success" onclick="saveSession()">💾 Registrar Entrenamiento</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Submodal Justificación -->
+  <div class="submodal-overlay" id="justificationModal">
+    <div class="submodal-card">
+      <h4 id="justificationPlayerName">Justificación de Falta</h4>
+      <textarea id="justificationInput" placeholder="Escribe la razón de la ausencia (ej. Enfermedad, Examen...)"></textarea>
+      <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+        <button class="btn btn-secondary btn-sm" onclick="closeJustificationModal(false)">Cancelar</button>
+        <button class="btn btn-primary btn-sm" onclick="closeJustificationModal(true)">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       ESTADO DE LA APLICACIÓN
+       ========================================================================== */
+    let currentCategory = ''; // 'Infantil' o 'Cadete'
+    let playersData = [];     // Lista de objetos jugadora de la categoría actual
+    let activeJustificationIndex = null;
+    let globalLogs = [];
+
+    // Listas por defecto si no existen en localStorage
+    const defaultRosters = {
+      Infantil: [
+        "Paula Giménez", "Lucía Martínez", "Alba Ferrando", "Sofia Peris", 
+        "Ainhoa López", "Martina Sanchis", "Valeria Pastor", "Clara Beltrán"
+      ],
+      Cadete: [
+        "Elena Barberá", "Carla Montagud", "Irantzu Hervás", "Marta Signes", 
+        "Nerea Ribera", "Laia Cucarella", "Irene Camarena", "Ariadna Mascot"
+      ]
+    };
+
+    /* ==========================================================================
+       INICIALIZACIÓN
+       ========================================================================== */
+    document.addEventListener('DOMContentLoaded', () => {
+      // Establecer fecha por defecto a HOY
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('sessionDate').value = today;
+
+      // Cargar logs guardados si existen
+      const savedLogs = localStorage.getItem('nva_logs');
+      if (savedLogs) {
+        globalLogs = JSON.parse(savedLogs);
+        renderLogs();
+      }
+    });
+
+    /* ==========================================================================
+       GESTIÓN DE MÓDALES Y DATOS DE JUGADORAS
+       ========================================================================== */
+    function openAttendanceModal(category) {
+      currentCategory = category;
+      document.getElementById('modalTitle').textContent = `Registro de Entrenamiento - Equipo ${category}`;
+      
+      // Cargar lista de jugadoras de localStorage o default
+      const savedRoster = localStorage.getItem(`nva_roster_${category}`);
+      let playerNames = [];
+      if (savedRoster) {
+        playerNames = JSON.parse(savedRoster);
+      } else {
+        playerNames = defaultRosters[category] || [];
+      }
+
+      // Estructurar array de objetos para el estado del formulario
+      playersData = playerNames.map(name => ({
+        name: name,
+        attendance: 'V', // 'V' | 'X' | null
+        rating: 5,       // 0 a 5
+        strikes: 0,      // 0 a 3
+        comment: ''
+      }));
+
+      renderTable();
+      document.getElementById('attendanceModal').classList.add('active');
+    }
+
+    function closeAttendanceModal() {
+      document.getElementById('attendanceModal').classList.remove('active');
+    }
+
+    /* ==========================================================================
+       RENDERIZADO DE LA TABLA
+       ========================================================================== */
+    function renderTable() {
+      const tbody = document.getElementById('playerTableBody');
+      tbody.innerHTML = '';
+
+      playersData.forEach((player, idx) => {
+        const tr = document.createElement('tr');
+
+        // Columna Nombre
+        const tdName = document.createElement('td');
+        tdName.innerHTML = `<strong style="cursor:pointer;" onclick="editPlayerName(${idx})" title="Haz clic para editar">${escapeHtml(player.name)}</strong>`;
+        tr.appendChild(tdName);
+
+        // Columna Asistencia
+        const tdAtt = document.createElement('td');
+        tdAtt.className = 'col-att';
+        tdAtt.innerHTML = `
+          <div class="att-toggle">
+            <button class="att-btn ${player.attendance === 'V' ? 'active-v' : ''}" onclick="setAttendance(${idx}, 'V')">V</button>
+            <button class="att-btn ${player.attendance === 'X' ? 'active-x' : ''}" onclick="setAttendance(${idx}, 'X')">X</button>
+          </div>
+        `;
+        tr.appendChild(tdAtt);
+
+        // Columna Valoración (Estrellas 0 a 5)
+        const tdRating = document.createElement('td');
+        tdRating.className = 'col-rating';
+        tdRating.appendChild(createStarRating(idx, player.rating));
+        tr.appendChild(tdRating);
+
+        // Columna Strikes (3 X)
+        const tdStrikes = document.createElement('td');
+        tdStrikes.className = 'col-strikes';
+        tdStrikes.appendChild(createStrikeSelector(idx, player.strikes));
+        tr.appendChild(tdStrikes);
+
+        // Columna Comentarios
+        const tdComment = document.createElement('td');
+        tdComment.className = 'col-comment';
+        tdComment.innerHTML = `
+          <input type="text" value="${escapeHtml(player.comment)}" 
+                 placeholder="Añadir nota..." 
+                 style="width: 100%; font-size: 0.85rem;" 
+                 onchange="updateComment(${idx}, this.value)">
+        `;
+        tr.appendChild(tdComment);
+
+        // Columna Eliminar
+        const tdAction = document.createElement('td');
+        tdAction.innerHTML = `<button style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:1.1rem;" onclick="removePlayer(${idx})" title="Eliminar jugadora">&times;</button>`;
+        tr.appendChild(tdAction);
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    /* ==========================================================================
+       COMPONENTES INTERACTIVOS DE LA TABLA
+       ========================================================================== */
+    function createStarRating(playerIdx, currentRating) {
+      const container = document.createElement('div');
+      container.className = 'star-rating';
+      
+      for (let i = 1; i <= 5; i++) {
+        const star = document.createElement('span');
+        star.className = `star ${i <= currentRating ? 'filled' : ''}`;
+        star.innerHTML = '★';
+        star.onclick = () => {
+          // Si pulsa la misma estrella que ya tiene, se resetea a 0 estrellas
+          playersData[playerIdx].rating = (playersData[playerIdx].rating === i) ? 0 : i;
+          renderTable();
+        };
+        container.appendChild(star);
+      }
+      return container;
+    }
+
+    function createStrikeSelector(playerIdx, currentStrikes) {
+      const container = document.createElement('div');
+      container.className = 'strikes-container';
+
+      for (let i = 1; i <= 3; i++) {
+        const box = document.createElement('div');
+        box.className = `strike-box ${i <= currentStrikes ? 'active' : ''}`;
+        box.textContent = 'X';
+        box.onclick = () => {
+          playersData[playerIdx].strikes = (playersData[playerIdx].strikes === i) ? i - 1 : i;
+          renderTable();
+        };
+        container.appendChild(box);
+      }
+      return container;
+    }
+
+    /* ==========================================================================
+       ACCIONES Y MANEJO DE EVENTOS DE JUGADORAS
+       ========================================================================== */
+    function setAttendance(idx, status) {
+      playersData[idx].attendance = status;
+      if (status === 'X') {
+        openJustificationModal(idx);
+      } else {
+        renderTable();
+      }
+    }
+
+    function updateComment(idx, val) {
+      playersData[idx].comment = val;
+    }
+
+    function promptAddPlayer() {
+      const name = prompt("Nombre de la nueva jugadora:");
+      if (name && name.trim() !== "") {
+        playersData.push({
+          name: name.trim(),
+          attendance: 'V',
+          rating: 5,
+          strikes: 0,
+          comment: ''
+        });
+        saveCurrentRosterToLocalStorage();
+        renderTable();
+      }
+    }
+
+    function editPlayerName(idx) {
+      const newName = prompt("Editar nombre de la jugadora:", playersData[idx].name);
+      if (newName && newName.trim() !== "") {
+        playersData[idx].name = newName.trim();
+        saveCurrentRosterToLocalStorage();
+        renderTable();
+      }
+    }
+
+    function removePlayer(idx) {
+      if (confirm(`¿Seguro que deseas eliminar a ${playersData[idx].name} de la lista?`)) {
+        playersData.splice(idx, 1);
+        saveCurrentRosterToLocalStorage();
+        renderTable();
+      }
+    }
+
+    /* ==========================================================================
+       ACCIONES EN MASA (CABECERA)
+       ========================================================================== */
+    function bulkSetAttendance(status) {
+      playersData.forEach(p => p.attendance = status);
+      renderTable();
+    }
+
+    function bulkSetRating(rating) {
+      playersData.forEach(p => p.rating = rating);
+      renderTable();
+    }
+
+    function bulkClearStrikes() {
+      playersData.forEach(p => p.strikes = 0);
+      renderTable();
+    }
+
+    /* ==========================================================================
+       SUBMODAL JUSTIFICACIÓN
+       ========================================================================== */
+    function openJustificationModal(idx) {
+      activeJustificationIndex = idx;
+      document.getElementById('justificationPlayerName').textContent = `Justificación para ${playersData[idx].name}`;
+      document.getElementById('justificationInput').value = playersData[idx].comment || '';
+      document.getElementById('justificationModal').classList.add('active');
+    }
+
+    function closeJustificationModal(save) {
+      if (save && activeJustificationIndex !== null) {
+        playersData[activeJustificationIndex].comment = document.getElementById('justificationInput').value.trim();
+      }
+      activeJustificationIndex = null;
+      document.getElementById('justificationModal').classList.remove('active');
+      renderTable();
+    }
+
+    /* ==========================================================================
+       PERSISTENCIA DE PLANTILLA EN ARCHIVO .TXT Y LOCALSTORAGE
+       ========================================================================== */
+    function saveCurrentRosterToLocalStorage() {
+      const names = playersData.map(p => p.name);
+      localStorage.setItem(`nva_roster_${currentCategory}`, JSON.stringify(names));
+    }
+
+    function exportRosterTxt() {
+      saveCurrentRosterToLocalStorage();
+      const names = playersData.map(p => p.name).join('
+');
+      downloadFile(`${currentCategory}_Plantilla_NouVoleiAlzira.txt`, names);
+    }
+
+    function triggerLoadTxt() {
+      document.getElementById('txtFileInput').click();
+    }
+
+    function handleTxtFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const content = e.target.result;
+        const names = content.split(/?
+/).map(n => n.trim()).filter(n => n.length > 0);
+        
+        if (names.length > 0) {
+          playersData = names.map(name => ({
+            name: name,
+            attendance: 'V',
+            rating: 5,
+            strikes: 0,
+            comment: ''
+          }));
+          saveCurrentRosterToLocalStorage();
+          renderTable();
+          alert(`Cargadas ${names.length} jugadoras correctamente.`);
+        } else {
+          alert('El archivo TXT está vacío o no tiene un formato válido.');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = ''; // Reset
+    }
+
+    /* ==========================================================================
+       REGISTRO DE ENTRENAMIENTOS (LOGS Y DESCARGA DE HISTÓRICO)
+       ========================================================================== */
+    function saveSession() {
+      const dateVal = document.getElementById('sessionDate').value;
+      if (!dateVal) {
+        alert('Por favor selecciona una fecha válida.');
+        return;
+      }
+
+      const sessionRecord = {
+        timestamp: new Date().toISOString(),
+        date: dateVal,
+        category: currentCategory,
+        records: playersData.map(p => ({
+          name: p.name,
+          attendance: p.attendance,
+          rating: p.rating,
+          strikes: p.strikes,
+          comment: p.comment
+        }))
+      };
+
+      globalLogs.unshift(sessionRecord);
+      localStorage.setItem('nva_logs', JSON.stringify(globalLogs));
+      
+      // Auto-guardado de lista
+      saveCurrentRosterToLocalStorage();
+
+      renderLogs();
+      closeAttendanceModal();
+      alert(`¡Entrenamiento de ${currentCategory} del ${dateVal} registrado con éxito!`);
+    }
+
+    function renderLogs() {
+      const container = document.getElementById('logsContainer');
+      if (globalLogs.length === 0) {
+        container.innerHTML = '<div class="log-item" style="color: #94a3b8;">No hay sesiones guardadas en esta sesión.</div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      globalLogs.forEach(log => {
+        const div = document.createElement('div');
+        div.className = 'log-item';
+        
+        const badgeClass = log.category === 'Infantil' ? 'badge-infantil' : 'badge-cadete';
+        const totalV = log.records.filter(r => r.attendance === 'V').length;
+        const totalX = log.records.filter(r => r.attendance === 'X').length;
+        
+        div.innerHTML = `
+          <span class="badge ${badgeClass}">${log.category}</span>
+          <strong>[${log.date}]</strong> - ${totalV} Presentes, ${totalX} Ausentes | Total: ${log.records.length} jugadoras
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function exportLogsToTxt() {
+      if (globalLogs.length === 0) {
+        alert('No hay registros guardados para exportar.');
+        return;
+      }
+
+      let textContent = "====================================================
+";
+      textContent += "    CLUB NOU VOLEI ALZIRA - REGISTRO DE ENTRENAMIENTOS   
+";
+      textContent += "====================================================
+
+";
+
+      globalLogs.forEach((log, index) => {
+        textContent += `FECHA: ${log.date}  | EQUIPO: ${log.category.toUpperCase()}
+`;
+        textContent += `----------------------------------------------------
+`;
+        textContent += `JUGADORA             | ASIST. | CALIF. | STRIKES | COMENTARIOS
+`;
+        textContent += `----------------------------------------------------
+`;
+        
+        log.records.forEach(r => {
+          const namePad = r.name.padEnd(20, ' ');
+          const attPad = (r.attendance || '-').padEnd(6, ' ');
+          const ratPad = (`${r.rating}★`).padEnd(6, ' ');
+          const strPad = (`${r.strikes} X`).padEnd(7, ' ');
+          const comm = r.comment || '';
+          textContent += `${namePad} | ${attPad} | ${ratPad} | ${strPad} | ${comm}
+`;
+        });
+        textContent += "
+
+";
+      });
+
+      downloadFile("Histórico_Entrenamientos_NouVoleiAlzira.txt", textContent);
+    }
+
+    /* ==========================================================================
+       UTILIDADES
+       ========================================================================== */
+    function downloadFile(filename, text) {
+      const element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', filename);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, function(m) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[m];
+      });
+    }
+  </script>
+</body>
+</html>
