@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <title>Nou Volei Alzira - Control de Asistencia y Entrenamientos</title>
 
   <!-- Librerías externas para Generación de PDF y Gráficos -->
@@ -29,7 +29,8 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
@@ -38,26 +39,28 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      touch-action: manipulation;
+      -webkit-font-smoothing: antialiased;
     }
 
     header {
       background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
       color: white;
-      padding: 2.5rem 1.5rem;
+      padding: 1.5rem 1rem;
       text-align: center;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     header h1 {
-      font-size: 2.2rem;
+      font-size: 1.75rem;
       font-weight: 800;
       letter-spacing: -0.025em;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
     }
 
     header p {
       color: #93c5fd;
-      font-size: 1.1rem;
+      font-size: 0.95rem;
     }
 
     main {
@@ -65,29 +68,66 @@
       max-width: 1200px;
       width: 100%;
       margin: 0 auto;
-      padding: 2.5rem 1.5rem;
+      padding: 1rem;
+    }
+
+    .selector-container {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+      text-align: center;
     }
 
     .selector-title {
-      text-align: center;
-      margin-bottom: 2rem;
-      color: var(--text-muted);
-      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .trainer-select-wrapper {
+      max-width: 400px;
+      margin: 0 auto 1.25rem auto;
+    }
+
+    .trainer-select-wrapper select, select, input[type="text"], input[type="date"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 16px; /* Evita auto-zoom molesto en iOS Safari */
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background-color: white;
+      color: var(--text);
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .trainer-select-wrapper select {
+      font-weight: 600;
+      color: var(--primary);
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231e3a8a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1.1em;
+      padding-right: 2.5rem;
     }
 
     .teams-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
       justify-content: center;
-      max-width: 800px;
-      margin: 0 auto 3rem auto;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
     .team-card {
       background: var(--card-bg);
       border-radius: var(--radius);
-      padding: 2.5rem 2rem;
+      padding: 1.5rem 1.25rem;
       text-align: center;
       box-shadow: var(--shadow);
       border: 1px solid var(--border);
@@ -96,37 +136,44 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
-    .team-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
-      border-color: var(--primary-light);
+    .team-card:active {
+      transform: scale(0.98);
+      background-color: #f1f5f9;
     }
 
     .team-icon {
-      width: 64px;
-      height: 64px;
+      width: 50px;
+      height: 50px;
       background: #eff6ff;
       color: var(--primary-light);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.8rem;
-      margin-bottom: 1.25rem;
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
     }
 
+    /* Cambio de Jerarquía: Nombre del equipo principal, Categoría secundaria */
     .team-card h2 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 0.25rem;
       color: var(--primary);
     }
 
     .team-card p {
       color: var(--text-muted);
       font-size: 0.95rem;
-      margin-bottom: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      background: #f1f5f9;
+      padding: 0.2rem 0.75rem;
+      border-radius: 20px;
     }
 
     .btn {
@@ -134,66 +181,33 @@
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.95rem;
       font-weight: 600;
       border-radius: 8px;
       border: none;
       cursor: pointer;
       transition: all 0.2s;
+      min-height: 44px; /* Target táctil óptimo iOS/Android */
+      touch-action: manipulation;
     }
 
-    .btn-primary {
-      background-color: var(--primary-light);
-      color: white;
-    }
+    .btn-primary { background-color: var(--primary-light); color: white; }
+    .btn-primary:active { background-color: var(--primary); }
 
-    .btn-primary:hover {
-      background-color: var(--primary);
-    }
+    .btn-secondary { background-color: #f1f5f9; color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:active { background-color: #e2e8f0; }
 
-    .btn-secondary {
-      background-color: #f1f5f9;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
+    .btn-success { background-color: var(--success); color: white; }
+    .btn-success:active { background-color: #059669; }
 
-    .btn-secondary:hover {
-      background-color: #e2e8f0;
-    }
+    .btn-danger { background-color: var(--danger); color: white; }
+    .btn-danger:active { background-color: #dc2626; }
 
-    .btn-success {
-      background-color: var(--success);
-      color: white;
-    }
+    .btn-pdf { background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%); color: white; }
+    .btn-pdf:active { opacity: 0.9; }
 
-    .btn-success:hover {
-      background-color: #059669;
-    }
-
-    .btn-danger {
-      background-color: var(--danger);
-      color: white;
-    }
-
-    .btn-danger:hover {
-      background-color: #dc2626;
-    }
-
-    .btn-pdf {
-      background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
-      color: white;
-    }
-
-    .btn-pdf:hover {
-      opacity: 0.95;
-      transform: translateY(-1px);
-    }
-
-    .btn-sm {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.875rem;
-    }
+    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.85rem; min-height: 38px; }
 
     .modal-overlay {
       position: fixed;
@@ -203,6 +217,7 @@
       height: 100vh;
       background: rgba(15, 23, 42, 0.6);
       backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -210,7 +225,7 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.25s ease, visibility 0.25s ease;
-      padding: 1rem;
+      padding: 0.5rem;
     }
 
     .modal-overlay.active {
@@ -223,21 +238,15 @@
       border-radius: var(--radius);
       width: 100%;
       max-width: 1100px;
-      max-height: 90vh;
+      max-height: 92vh;
       display: flex;
       flex-direction: column;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       overflow: hidden;
-      animation: modalSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes modalSlide {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
     }
 
     .modal-header {
-      padding: 1.25rem 1.5rem;
+      padding: 1rem 1.25rem;
       background: #f8fafc;
       border-bottom: 1px solid var(--border);
       display: flex;
@@ -245,31 +254,30 @@
       justify-content: space-between;
     }
 
-    .modal-header h3 {
-      font-size: 1.3rem;
-      color: var(--primary);
-    }
+    .modal-header h3 { font-size: 1.15rem; color: var(--primary); }
 
     .close-btn {
       background: transparent;
       border: none;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       cursor: pointer;
       color: var(--text-muted);
       line-height: 1;
-    }
-
-    .close-btn:hover {
-      color: var(--text);
+      padding: 0.25rem 0.5rem;
+      min-height: 44px;
+      min-width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .modal-toolbar {
-      padding: 1rem 1.5rem;
+      padding: 0.85rem 1.25rem;
       background: white;
       border-bottom: 1px solid var(--border);
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 0.75rem;
       align-items: center;
       justify-content: space-between;
     }
@@ -278,54 +286,45 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      flex: 1;
+      min-width: 220px;
     }
 
     .date-picker-group label {
       font-weight: 600;
       color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    input[type="date"], input[type="text"], select {
-      padding: 0.5rem 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 0.95rem;
-      outline: none;
-    }
-
-    input[type="date"]:focus, input[type="text"]:focus, select:focus {
-      border-color: var(--primary-light);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      font-size: 0.875rem;
+      white-space: nowrap;
     }
 
     .modal-body {
-      padding: 1.5rem;
+      padding: 0.75rem;
       overflow-y: auto;
       flex: 1;
+      -webkit-overflow-scrolling: touch;
     }
 
     .roster-actions {
       display: flex;
       gap: 0.5rem;
-      margin-bottom: 1.25rem;
       flex-wrap: wrap;
     }
 
     .table-responsive {
       width: 100%;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     th, td {
-      padding: 0.85rem 0.75rem;
+      padding: 0.65rem 0.5rem;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
     }
@@ -339,15 +338,11 @@
       z-index: 10;
     }
 
-    tr:hover {
-      background-color: #f8fafc;
-    }
-
-    .col-name { min-width: 180px; }
-    .col-att { min-width: 130px; text-align: center; }
-    .col-rating { min-width: 140px; text-align: center; }
-    .col-strikes { min-width: 120px; text-align: center; }
-    .col-comment { min-width: 200px; }
+    .col-name { min-width: 140px; }
+    .col-att { min-width: 110px; text-align: center; }
+    .col-rating { min-width: 130px; text-align: center; }
+    .col-strikes { min-width: 110px; text-align: center; }
+    .col-comment { min-width: 160px; }
 
     .att-toggle {
       display: inline-flex;
@@ -357,60 +352,57 @@
     }
 
     .att-btn {
-      padding: 0.4rem 0.8rem;
+      padding: 0.5rem 0.85rem;
       border: none;
       background: white;
       cursor: pointer;
       font-weight: 700;
-      font-size: 0.85rem;
-      transition: background 0.15s;
+      font-size: 0.9rem;
+      min-height: 40px;
+      touch-action: manipulation;
     }
 
-    .att-btn.active-v {
-      background-color: var(--success);
-      color: white;
-    }
-
-    .att-btn.active-x {
-      background-color: var(--danger);
-      color: white;
-    }
+    .att-btn.active-v { background-color: var(--success); color: white; }
+    .att-btn.active-x { background-color: var(--danger); color: white; }
 
     .star-rating {
       display: inline-flex;
       gap: 2px;
       cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .star {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       color: #cbd5e1;
-      transition: color 0.15s;
+      padding: 0.2rem;
+      touch-action: manipulation;
     }
 
-    .star.filled {
-      color: var(--accent);
-    }
+    .star.filled { color: var(--accent); }
 
     .strikes-container {
       display: inline-flex;
       gap: 4px;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .strike-box {
-      width: 26px;
-      height: 26px;
-      border-radius: 4px;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
       border: 1px solid #cbd5e1;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       cursor: pointer;
-      user-select: none;
       background: white;
       color: var(--text-muted);
+      touch-action: manipulation;
     }
 
     .strike-box.active {
@@ -420,13 +412,13 @@
     }
 
     .modal-footer {
-      padding: 1rem 1.5rem;
+      padding: 0.85rem 1.25rem;
       background: #f8fafc;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 1rem;
+      gap: 0.75rem;
       flex-wrap: wrap;
     }
 
@@ -444,6 +436,7 @@
       opacity: 0;
       visibility: hidden;
       transition: all 0.2s ease;
+      padding: 1rem;
     }
 
     .submodal-overlay.active {
@@ -454,10 +447,13 @@
     .submodal-card {
       background: white;
       border-radius: var(--radius);
-      padding: 1.5rem;
-      width: 90%;
-      max-width: 420px;
+      padding: 1.25rem;
+      width: 100%;
+      max-width: 440px;
       box-shadow: var(--shadow);
+      max-height: 90vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .submodal-card h4 {
@@ -473,13 +469,13 @@
       border-radius: 6px;
       resize: none;
       margin-bottom: 1rem;
-      font-family: inherit;
+      font-size: 16px;
     }
 
     .logs-section {
       background: var(--card-bg);
       border-radius: var(--radius);
-      padding: 1.5rem;
+      padding: 1.25rem;
       box-shadow: var(--shadow);
       border: 1px solid var(--border);
       margin-top: 1rem;
@@ -491,12 +487,13 @@
       align-items: center;
       margin-bottom: 1rem;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.75rem;
     }
 
     .logs-actions {
       display: flex;
       gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
     .logs-list {
@@ -506,19 +503,18 @@
       border-radius: 6px;
       background: #f8fafc;
       padding: 0.5rem;
+      -webkit-overflow-scrolling: touch;
     }
 
     .log-item {
-      font-size: 0.875rem;
-      padding: 0.4rem 0.6rem;
+      font-size: 0.85rem;
+      padding: 0.5rem;
       border-bottom: 1px solid var(--border);
-      font-family: monospace;
       color: #334155;
+      line-height: 1.4;
     }
 
-    .log-item:last-child {
-      border-bottom: none;
-    }
+    .log-item:last-child { border-bottom: none; }
 
     .badge {
       display: inline-block;
@@ -530,14 +526,11 @@
       margin-right: 0.4rem;
     }
 
-    .badge-infantil { background: #dbeafe; color: #1e40af; }
-    .badge-cadete { background: #fef3c7; color: #92400e; }
+    .badge-tag { background: #e0e7ff; color: #3730a3; }
 
-    .hidden-input {
-      display: none;
-    }
+    .hidden-input { display: none; }
 
-    /* Estilos para la Plantilla del PDF */
+    /* PDF Template Styles */
     #pdfTemplateContainer {
       position: absolute;
       left: -9999px;
@@ -545,13 +538,9 @@
       width: 800px;
       background: #ffffff;
       color: #1e293b;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
-    .pdf-render-box {
-      padding: 30px;
-      background: #ffffff;
-    }
+    .pdf-render-box { padding: 30px; background: #ffffff; }
 
     .pdf-header {
       background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
@@ -559,31 +548,11 @@
       padding: 24px;
       border-radius: 16px;
       margin-bottom: 24px;
-      box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
       position: relative;
-      overflow: hidden;
     }
 
-    .pdf-header::after {
-      content: '🏐';
-      position: absolute;
-      right: 20px;
-      bottom: -10px;
-      font-size: 80px;
-      opacity: 0.15;
-    }
-
-    .pdf-header h1 {
-      font-size: 26px;
-      font-weight: 800;
-      margin-bottom: 6px;
-      letter-spacing: -0.5px;
-    }
-
-    .pdf-header p {
-      font-size: 14px;
-      color: #dbeafe;
-    }
+    .pdf-header h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+    .pdf-header p { font-size: 13px; color: #dbeafe; }
 
     .pdf-meta {
       display: flex;
@@ -592,95 +561,50 @@
       border: 1px solid #e2e8f0;
       border-radius: 12px;
       padding: 12px 20px;
-      margin-bottom: 24px;
-      font-size: 13px;
+      margin-bottom: 20px;
+      font-size: 12px;
       font-weight: 600;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .pdf-section-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: #1e3a8a;
       margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
       border-bottom: 2px solid #eff6ff;
       padding-bottom: 6px;
     }
 
-    .pdf-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 28px;
-      font-size: 12px;
-    }
+    .pdf-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 11px; }
+    .pdf-table th { background-color: #3b82f6; color: white; text-align: left; padding: 8px 10px; font-weight: 700; }
+    .pdf-table td { padding: 7px 10px; border-bottom: 1px solid #e2e8f0; }
+    .pdf-table tr:nth-child(even) { background-color: #f8fafc; }
 
-    .pdf-table th {
-      background-color: #3b82f6;
-      color: white;
-      text-align: left;
-      padding: 10px 12px;
-      font-weight: 700;
-    }
-
-    .pdf-table th:first-child { border-top-left-radius: 8px; }
-    .pdf-table th:last-child { border-top-right-radius: 8px; }
-
-    .pdf-table td {
-      padding: 8px 12px;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .pdf-table tr:nth-child(even) {
-      background-color: #f8fafc;
-    }
-
-    .pdf-charts-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .pdf-chart-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 14px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
-
-    .pdf-chart-card h4 {
-      font-size: 13px;
-      text-align: center;
-      color: #334155;
-      margin-bottom: 10px;
-    }
+    .pdf-charts-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .pdf-chart-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; }
+    .pdf-chart-card h4 { font-size: 12px; text-align: center; color: #334155; margin-bottom: 8px; }
   </style>
 </head>
 <body>
 
   <header>
     <h1>Nou Volei Alzira</h1>
-    <p>Gestión de Asistencia y Rendimiento de Entrenamientos</p>
+    <p>Gestión de Asistencia y Rendimiento</p>
   </header>
 
   <main>
-    <p class="selector-title">Selecciona una categoría para comenzar el registro</p>
-    
-    <div class="teams-grid">
-      <div class="team-card" onclick="openAttendanceModal('Infantil')">
-        <div class="team-icon">🏐</div>
-        <h2>Infantil</h2>
-        <p>Equipo Infantil Femenino / Masculino</p>
-        <button class="btn btn-primary" type="button">Abrir Registro</button>
+    <div class="selector-container">
+      <p class="selector-title">Selección Entrenador</p>
+      <div class="trainer-select-wrapper">
+        <select id="trainerSelector" onchange="onTrainerSelected()">
+          <!-- Opciones de entrenadores fijos -->
+        </select>
       </div>
 
-      <div class="team-card" onclick="openAttendanceModal('Cadete')">
-        <div class="team-icon">🏐</div>
-        <h2>Cadete</h2>
-        <p>Equipo Cadete Femenino / Masculino</p>
-        <button class="btn btn-primary" type="button">Abrir Registro</button>
+      <div class="teams-grid" id="teamsGridContainer">
+        <!-- Los botones de los equipos se generan dinámicamente -->
       </div>
     </div>
 
@@ -688,8 +612,10 @@
       <div class="logs-header">
         <h3>Histórico de Sesiones Registradas</h3>
         <div class="logs-actions">
+          <button class="btn btn-danger btn-sm" onclick="triggerLoadHistoryTxt()">📥 Cargar Histórico</button>
           <button class="btn btn-pdf btn-sm" onclick="openPdfDateModal()">📄 Generar Informe PDF</button>
-          <button class="btn btn-secondary btn-sm" onclick="exportLogsToTxt()">📥 Descargar Histórico (.txt)</button>
+          <button class="btn btn-secondary btn-sm" onclick="exportLogsToTxt()">💾 Descargar Histórico (.txt)</button>
+          <input type="file" id="historyTxtFileInput" class="hidden-input" accept=".txt" onchange="handleHistoryTxtFile(event)">
         </div>
       </div>
       <div class="logs-list" id="logsContainer">
@@ -698,11 +624,11 @@
     </section>
   </main>
 
+  <!-- Modal de Registro de Asistencia -->
   <div class="modal-overlay" id="attendanceModal">
     <div class="modal-container">
-      
       <div class="modal-header">
-        <h3 id="modalTitle">Registro de Entrenamiento - Equipo</h3>
+        <h3 id="modalTitle">Registro de Entrenamiento</h3>
         <button class="close-btn" onclick="closeAttendanceModal()">&times;</button>
       </div>
 
@@ -727,23 +653,22 @@
                 <th class="col-name">Jugadora</th>
                 <th class="col-att">
                   Asistencia<br>
-                  <span style="font-weight:normal; font-size: 0.8rem; cursor:pointer; color:var(--primary-light)" onclick="bulkSetAttendance('V')">[Todos V]</span>
-                  <span style="font-weight:normal; font-size: 0.8rem; cursor:pointer; color:var(--danger)" onclick="bulkSetAttendance('X')">[Todos X]</span>
+                  <span style="font-weight:normal; font-size: 0.75rem; cursor:pointer; color:var(--primary-light)" onclick="bulkSetAttendance('V')">[Todos V]</span>
+                  <span style="font-weight:normal; font-size: 0.75rem; cursor:pointer; color:var(--danger)" onclick="bulkSetAttendance('X')">[Todos X]</span>
                 </th>
                 <th class="col-rating">
                   Calidad (0-5★)<br>
-                  <span style="font-weight:normal; font-size: 0.8rem; cursor:pointer; color:var(--accent)" onclick="bulkSetRating(5)">[Todas 5★]</span>
+                  <span style="font-weight:normal; font-size: 0.75rem; cursor:pointer; color:var(--accent)" onclick="bulkSetRating(5)">[Todas 5★]</span>
                 </th>
                 <th class="col-strikes">
                   Strikes<br>
-                  <span style="font-weight:normal; font-size: 0.8rem; cursor:pointer; color:var(--text-muted)" onclick="bulkClearStrikes()">[Reset]</span>
+                  <span style="font-weight:normal; font-size: 0.75rem; cursor:pointer; color:var(--text-muted)" onclick="bulkClearStrikes()">[Reset]</span>
                 </th>
                 <th class="col-comment">Comentarios / Justificación</th>
-                <th style="width: 50px;"></th>
+                <th style="width: 40px;"></th>
               </tr>
             </thead>
-            <tbody id="playerTableBody">
-            </tbody>
+            <tbody id="playerTableBody"></tbody>
           </table>
         </div>
       </div>
@@ -752,10 +677,10 @@
         <button class="btn btn-secondary" onclick="closeAttendanceModal()">Cancelar</button>
         <button class="btn btn-success" onclick="saveSession()">💾 Registrar Entrenamiento</button>
       </div>
-
     </div>
   </div>
 
+  <!-- Submodal de Justificación -->
   <div class="submodal-overlay" id="justificationModal">
     <div class="submodal-card">
       <h4 id="justificationPlayerName">Justificación de Falta</h4>
@@ -767,19 +692,23 @@
     </div>
   </div>
 
-  <!-- Submodal para Selección de Fechas para el PDF -->
+  <!-- Submodal Generar PDF con selección de Entrenador, Equipo y Fechas -->
   <div class="submodal-overlay" id="pdfDateModal">
     <div class="submodal-card">
       <h4>Generar Informe PDF</h4>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Selecciona el rango de fechas y equipo para filtrar el historial de entrenamientos.</p>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Filtra por entrenador, equipo y rango de fechas para generar el documento.</p>
       
       <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem;">
         <div>
-          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Equipo:</label>
+          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Entrenador:</label>
+          <select id="pdfTrainerFilter" onchange="onPdfTrainerSelected()" style="width: 100%;">
+            <!-- Dinámico -->
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Equipo / Equipos:</label>
           <select id="pdfTeamFilter" style="width: 100%;">
-            <option value="ALL">Todos los Equipos</option>
-            <option value="Infantil">Infantil</option>
-            <option value="Cadete">Cadete</option>
+            <!-- Dinámico -->
           </select>
         </div>
         <div>
@@ -804,13 +733,13 @@
     <div class="pdf-render-box" id="pdfRenderArea">
       <div class="pdf-header">
         <h1 id="pdfTitleDisplay">Informe de Rendimiento y Asistencia</h1>
-        <p>Club Nou Volei Alzira • Resumen para Familias</p>
+        <p>Club Nou Volei Alzira • Resumen de Entrenamientos</p>
       </div>
 
       <div class="pdf-meta">
+        <div><strong>Entrenador:</strong> <span id="pdfTrainerDisplay">-</span></div>
         <div><strong>Equipo:</strong> <span id="pdfTeamDisplay">-</span></div>
-        <div><strong>Fecha Inicio:</strong> <span id="pdfStartDisplay">-</span></div>
-        <div><strong>Fecha Fin:</strong> <span id="pdfEndDisplay">-</span></div>
+        <div><strong>Periodo:</strong> <span id="pdfStartDisplay">-</span> a <span id="pdfEndDisplay">-</span></div>
       </div>
 
       <div class="pdf-section-title">📊 Estadísticas Individuales de Jugadoras</div>
@@ -823,49 +752,79 @@
             <th style="text-align: center;">Total Strikes</th>
           </tr>
         </thead>
-        <tbody id="pdfTableBody">
-        </tbody>
+        <tbody id="pdfTableBody"></tbody>
       </table>
 
-      <div class="pdf-section-title" style="margin-top: 20px;">📈 Análisis General del Periodo</div>
+      <div class="pdf-section-title" style="margin-top: 15px;">📈 Análisis General del Periodo</div>
       <div class="pdf-charts-container">
         <div class="pdf-chart-card">
           <h4>Asistencia (Jugadoras por Día)</h4>
-          <canvas id="pdfAttendanceChart" width="320" height="200"></canvas>
+          <canvas id="pdfAttendanceChart" width="320" height="180"></canvas>
         </div>
         <div class="pdf-chart-card">
           <h4>Media de Calidad del Entrenamiento (★)</h4>
-          <canvas id="pdfQualityChart" width="320" height="200"></canvas>
+          <canvas id="pdfQualityChart" width="320" height="180"></canvas>
         </div>
       </div>
     </div>
   </div>
 
   <script>
+    // 1. ENTRENADORES Y EQUIPOS FIJOS
+    // Orden invertido en objeto para priorizar Nombre del Equipo sobre Categoría
+    const FIXED_TRAINERS = [
+      {
+        id: 'abel',
+        name: 'Abel',
+        teams: [
+          { name: 'Enova', category: 'Infantil' },
+          { name: 'Enova', category: 'Cadete' },
+          { name: 'Espai Laboral', category: 'Juvenil' },
+          { name: 'Enova', category: 'Senior' }
+        ]
+      },
+      {
+        id: 'salva',
+        name: 'Salva',
+        teams: [
+          { name: 'Up! School', category: 'Infantil' },
+          { name: 'Up! School', category: 'Cadete' },
+          { name: 'Escuela', category: 'Escuela' }
+        ]
+      },
+      {
+        id: 'eneritz',
+        name: 'Eneritz',
+        teams: [
+          { name: 'Jessi Esparza', category: 'Infantil' },
+          { name: 'Jessi Esparza', category: 'Cadete' }
+        ]
+      },
+      {
+        id: 'nicolas',
+        name: 'Nicolas',
+        teams: [
+          { name: 'Alevin', category: 'Alevin' }
+        ]
+      }
+    ];
+
+    let currentTeamName = '';
     let currentCategory = '';
+    let currentTrainerName = '';
     let playersData = [];
     let activeJustificationIndex = null;
     let globalLogs = [];
 
-    // Instancias globales para gráficos
+    // Instancias para gráficos PDF
     let attChartInstance = null;
     let qualChartInstance = null;
-
-    const defaultRosters = {
-      Infantil: [
-        "Paula Giménez", "Lucía Martínez", "Alba Ferrando", "Sofia Peris", 
-        "Ainhoa López", "Martina Sanchis", "Valeria Pastor", "Clara Beltrán"
-      ],
-      Cadete: [
-        "Elena Barberá", "Carla Montagud", "Irantzu Hervás", "Marta Signes", 
-        "Nerea Ribera", "Laia Cucarella", "Irene Camarena", "Ariadna Mascot"
-      ]
-    };
 
     document.addEventListener('DOMContentLoaded', () => {
       const today = new Date().toISOString().split('T')[0];
       document.getElementById('sessionDate').value = today;
 
+      // Cargar Logs guardados
       const savedLogs = localStorage.getItem('nva_logs');
       if (savedLogs) {
         try {
@@ -875,22 +834,76 @@
           console.error("Error cargando logs", e);
         }
       }
+
+      populateTrainerSelector();
     });
 
-    function openAttendanceModal(category) {
+    /* ==========================================================
+       DESPLIEGUE DE ENTRENADORES Y EQUIPOS
+       ========================================================== */
+
+    function populateTrainerSelector() {
+      const selector = document.getElementById('trainerSelector');
+      selector.innerHTML = '';
+
+      FIXED_TRAINERS.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = t.name;
+        selector.appendChild(opt);
+      });
+
+      if (FIXED_TRAINERS.length > 0) {
+        selector.value = FIXED_TRAINERS[0].id;
+        onTrainerSelected();
+      }
+    }
+
+    function onTrainerSelected() {
+      const selectedId = document.getElementById('trainerSelector').value;
+      const container = document.getElementById('teamsGridContainer');
+      container.innerHTML = '';
+
+      const trainer = FIXED_TRAINERS.find(t => t.id === selectedId);
+      if (!trainer || !trainer.teams) return;
+
+      currentTrainerName = trainer.name;
+
+      trainer.teams.forEach(team => {
+        const card = document.createElement('div');
+        card.className = 'team-card';
+        card.onclick = () => openAttendanceModal(team.name, team.category);
+        
+        // 2. CAMBIO DE ORDEN: Principal = Nombre del equipo, Secundario = Categoría
+        card.innerHTML = `
+          <div class="team-icon">🏐</div>
+          <h2>${escapeHtml(team.name)}</h2>
+          <p>${escapeHtml(team.category)}</p>
+          <button class="btn btn-primary btn-sm" type="button">Abrir Registro</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    /* ==========================================================
+       REGISTRO Y ASISTENCIA (CON GUARDADO COMPLETO)
+       ========================================================== */
+
+    function openAttendanceModal(teamName, category) {
+      currentTeamName = teamName;
       currentCategory = category;
-      document.getElementById('modalTitle').textContent = `Registro de Entrenamiento - Equipo ${category}`;
+      document.getElementById('modalTitle').textContent = `Registro: ${teamName} (${category})`;
       
-      const savedRoster = localStorage.getItem(`nva_roster_${category}`);
+      const storageKey = `nva_roster_${teamName}_${category}`;
+      const savedRoster = localStorage.getItem(storageKey);
       let playerNames = [];
+      
       if (savedRoster) {
         try {
           playerNames = JSON.parse(savedRoster);
         } catch(e) {
-          playerNames = defaultRosters[category] || [];
+          playerNames = [];
         }
-      } else {
-        playerNames = defaultRosters[category] || [];
       }
 
       playersData = playerNames.map(name => ({
@@ -917,7 +930,7 @@
         const tr = document.createElement('tr');
 
         const tdName = document.createElement('td');
-        tdName.innerHTML = `<strong style="cursor:pointer;" onclick="editPlayerName(${idx})" title="Haz clic para editar">${escapeHtml(player.name)}</strong>`;
+        tdName.innerHTML = `<strong style="cursor:pointer;" onclick="editPlayerName(${idx})" title="Editar nombre">${escapeHtml(player.name)}</strong>`;
         tr.appendChild(tdName);
 
         const tdAtt = document.createElement('td');
@@ -945,13 +958,12 @@
         tdComment.innerHTML = `
           <input type="text" value="${escapeHtml(player.comment)}" 
                  placeholder="Añadir nota..." 
-                 style="width: 100%; font-size: 0.85rem;" 
                  onchange="updateComment(${idx}, this.value)">
         `;
         tr.appendChild(tdComment);
 
         const tdAction = document.createElement('td');
-        tdAction.innerHTML = `<button type="button" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:1.1rem;" onclick="removePlayer(${idx})" title="Eliminar jugadora">&times;</button>`;
+        tdAction.innerHTML = `<button type="button" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:1.2rem; min-height:40px; min-width:30px;" onclick="removePlayer(${idx})" title="Eliminar">&times;</button>`;
         tr.appendChild(tdAction);
 
         tbody.appendChild(tr);
@@ -1006,7 +1018,7 @@
     }
 
     function promptAddPlayer() {
-      const name = prompt("Nombre de la nueva jugadora:");
+      const name = prompt("Nombre de la jugadora:");
       if (name && name.trim() !== "") {
         playersData.push({
           name: name.trim(),
@@ -1021,7 +1033,7 @@
     }
 
     function editPlayerName(idx) {
-      const newName = prompt("Editar nombre de la jugadora:", playersData[idx].name);
+      const newName = prompt("Editar nombre:", playersData[idx].name);
       if (newName && newName.trim() !== "") {
         playersData[idx].name = newName.trim();
         saveCurrentRosterToLocalStorage();
@@ -1030,7 +1042,7 @@
     }
 
     function removePlayer(idx) {
-      if (confirm(`¿Seguro que deseas eliminar a ${playersData[idx].name} de la lista?`)) {
+      if (confirm(`¿Eliminar a ${playersData[idx].name}?`)) {
         playersData.splice(idx, 1);
         saveCurrentRosterToLocalStorage();
         renderTable();
@@ -1054,7 +1066,7 @@
 
     function openJustificationModal(idx) {
       activeJustificationIndex = idx;
-      document.getElementById('justificationPlayerName').textContent = `Justificación para ${playersData[idx].name}`;
+      document.getElementById('justificationPlayerName').textContent = `Ausencia: ${playersData[idx].name}`;
       document.getElementById('justificationInput').value = playersData[idx].comment || '';
       document.getElementById('justificationModal').classList.add('active');
     }
@@ -1070,13 +1082,13 @@
 
     function saveCurrentRosterToLocalStorage() {
       const names = playersData.map(p => p.name);
-      localStorage.setItem(`nva_roster_${currentCategory}`, JSON.stringify(names));
+      localStorage.setItem(`nva_roster_${currentTeamName}_${currentCategory}`, JSON.stringify(names));
     }
 
     function exportRosterTxt() {
       saveCurrentRosterToLocalStorage();
       const names = playersData.map(p => p.name).join('\n');
-      downloadFile(`${currentCategory}_Plantilla_NouVoleiAlzira.txt`, names);
+      downloadFile(`${currentTeamName}_${currentCategory}_Plantilla.txt`, names);
     }
 
     function triggerLoadTxt() {
@@ -1102,25 +1114,27 @@
           }));
           saveCurrentRosterToLocalStorage();
           renderTable();
-          alert(`Cargadas ${names.length} jugadoras correctamente.`);
-        } else {
-          alert('El archivo TXT está vacío o no tiene un formato válido.');
+          alert(`Cargadas ${names.length} jugadoras.`);
         }
       };
       reader.readAsText(file);
       event.target.value = '';
     }
 
+    // 3. REGISTRAR ENTRENAMIENTO Y GUARDAR TODOS LOS DATOS ESTRUCTURADOS
     function saveSession() {
       const dateVal = document.getElementById('sessionDate').value;
       if (!dateVal) {
-        alert('Por favor selecciona una fecha válida.');
+        alert('Selecciona una fecha válida.');
         return;
       }
 
       const sessionRecord = {
+        id: 's_' + Date.now(),
         timestamp: new Date().toISOString(),
         date: dateVal,
+        trainer: currentTrainerName,
+        teamName: currentTeamName,
         category: currentCategory,
         records: playersData.map(p => ({
           name: p.name,
@@ -1135,10 +1149,9 @@
       localStorage.setItem('nva_logs', JSON.stringify(globalLogs));
       
       saveCurrentRosterToLocalStorage();
-
       renderLogs();
       closeAttendanceModal();
-      alert(`¡Entrenamiento de ${currentCategory} del ${dateVal} registrado con éxito!`);
+      alert(`Entrenamiento registrado de ${currentTeamName} (${currentCategory}) - ${dateVal}`);
     }
 
     function renderLogs() {
@@ -1152,17 +1165,119 @@
       globalLogs.forEach(log => {
         const div = document.createElement('div');
         div.className = 'log-item';
-        
-        const badgeClass = log.category === 'Infantil' ? 'badge-infantil' : 'badge-cadete';
+
         const totalV = log.records.filter(r => r.attendance === 'V').length;
         const totalX = log.records.filter(r => r.attendance === 'X').length;
         
+        const displayTeam = log.teamName ? `${log.teamName} (${log.category})` : log.category;
+        const displayTrainer = log.trainer ? ` | Entrenador: ${log.trainer}` : '';
+
         div.innerHTML = `
-          <span class="badge ${badgeClass}">${log.category}</span>
-          <strong>[${log.date}]</strong> - ${totalV} Presentes, ${totalX} Ausentes | Total: ${log.records.length} jugadoras
+          <span class="badge badge-tag">${escapeHtml(displayTeam)}</span>
+          <strong>[${log.date}]</strong>${escapeHtml(displayTrainer)}<br>
+          <span style="color:var(--text-muted); font-size:0.8rem;">
+            ✓ ${totalV} Presentes | ✗ ${totalX} Ausentes | Total: ${log.records.length} jugadoras
+          </span>
         `;
         container.appendChild(div);
       });
+    }
+
+    /* ==========================================================
+       CARGA Y EXPORTACIÓN DEL HISTÓRICO COMPLETO
+       ========================================================== */
+
+    function triggerLoadHistoryTxt() {
+      document.getElementById('historyTxtFileInput').click();
+    }
+
+    function handleHistoryTxtFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        parseAndLoadHistoryTxt(e.target.result);
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    function parseAndLoadHistoryTxt(textContent) {
+      const blocks = textContent.split(/FECHA:\s*/);
+      let addedCount = 0;
+      let skippedCount = 0;
+
+      blocks.forEach(block => {
+        if (!block.trim()) return;
+
+        const lines = block.split(/\r?\n/);
+        const headerLine = lines[0].trim();
+        
+        // Parsear metadatos
+        const dateMatch = headerLine.match(/^([^\s|]+)/);
+        const teamMatch = headerLine.match(/EQUIPO:\s*([^|]+)/i);
+        const trainerMatch = headerLine.match(/ENTRENADOR:\s*(.+)$/i);
+
+        if (dateMatch) {
+          const dateVal = dateMatch[1].trim();
+          const rawTeam = teamMatch ? teamMatch[1].trim() : 'Equipo General';
+          const trainerVal = trainerMatch ? trainerMatch[1].trim() : 'Sin Especificar';
+
+          let teamName = rawTeam;
+          let category = rawTeam;
+          
+          if (rawTeam.includes('(') && rawTeam.includes(')')) {
+            const parts = rawTeam.split('(');
+            teamName = parts[0].trim();
+            category = parts[1].replace(')', '').trim();
+          }
+
+          // Verificar duplicado por fecha y equipo
+          const exists = globalLogs.some(log => log.date === dateVal && (log.teamName === teamName || log.category === category));
+
+          if (exists) {
+            skippedCount++;
+            return;
+          }
+
+          const records = [];
+          for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line || line.startsWith('---') || line.startsWith('JUGADORA') || line.startsWith('===')) continue;
+
+            const parts = line.split('|').map(p => p.trim());
+            if (parts.length >= 4) {
+              records.push({
+                name: parts[0],
+                attendance: parts[1] || 'V',
+                rating: parseInt(parts[2].replace('★', ''), 10) || 0,
+                strikes: parseInt(parts[3].replace('X', ''), 10) || 0,
+                comment: parts[4] || ''
+              });
+            }
+          }
+
+          if (records.length > 0) {
+            globalLogs.push({
+              id: 's_' + Date.now() + Math.random(),
+              timestamp: new Date().toISOString(),
+              date: dateVal,
+              trainer: trainerVal,
+              teamName: teamName,
+              category: category,
+              records: records
+            });
+            addedCount++;
+          }
+        }
+      });
+
+      globalLogs.sort((a, b) => new Date(b.date) - new Date(a.date));
+      localStorage.setItem('nva_logs', JSON.stringify(globalLogs));
+      renderLogs();
+
+      alert(`Histórico cargado: ${addedCount} añadidos, ${skippedCount} omitidos por existir previamente.`);
     }
 
     function exportLogsToTxt() {
@@ -1176,7 +1291,8 @@
       textContent += "====================================================\n\n";
 
       globalLogs.forEach((log) => {
-        textContent += `FECHA: ${log.date}  | EQUIPO: ${log.category.toUpperCase()}\n`;
+        const teamStr = log.teamName ? `${log.teamName} (${log.category})` : log.category;
+        textContent += `FECHA: ${log.date}  | EQUIPO: ${teamStr} | ENTRENADOR: ${log.trainer || 'N/A'}\n`;
         textContent += `----------------------------------------------------\n`;
         textContent += `JUGADORA             | ASIST. | CALIF. | STRIKES | COMENTARIOS\n`;
         textContent += `----------------------------------------------------\n`;
@@ -1206,6 +1322,7 @@
     }
 
     function escapeHtml(str) {
+      if (!str) return '';
       return str.replace(/[&<>"']/g, function(m) {
         return {
           '&': '&amp;',
@@ -1218,16 +1335,27 @@
     }
 
     /* ==========================================================
-       NUEVAS FUNCIONES: GENERACIÓN DE INFORME PDF
+       4. GENERACIÓN DE INFORME PDF CON FILTROS SOLICITADOS
        ========================================================== */
 
     function openPdfDateModal() {
       if (globalLogs.length === 0) {
-        alert('No hay registros de entrenamiento guardados en el historial para generar el informe.');
+        alert('No hay registros guardados para generar el informe PDF.');
         return;
       }
 
-      // Ordenar logs para inferir fechas por defecto
+      // Popular Select de Entrenadores en Modal PDF
+      const trainerSel = document.getElementById('pdfTrainerFilter');
+      trainerSel.innerHTML = '<option value="ALL">Todos los Entrenadores</option>';
+      FIXED_TRAINERS.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = t.name;
+        trainerSel.appendChild(opt);
+      });
+
+      onPdfTrainerSelected();
+
       const sortedLogs = [...globalLogs].sort((a, b) => new Date(a.date) - new Date(b.date));
       document.getElementById('pdfStartDate').value = sortedLogs[0].date;
       document.getElementById('pdfEndDate').value = sortedLogs[sortedLogs.length - 1].date;
@@ -1235,43 +1363,80 @@
       document.getElementById('pdfDateModal').classList.add('active');
     }
 
+    function onPdfTrainerSelected() {
+      const trainerId = document.getElementById('pdfTrainerFilter').value;
+      const teamSel = document.getElementById('pdfTeamFilter');
+      teamSel.innerHTML = '<option value="ALL">Todos los Equipos</option>';
+
+      let teamsToDisplay = [];
+
+      if (trainerId === 'ALL') {
+        FIXED_TRAINERS.forEach(t => teamsToDisplay.push(...t.teams));
+      } else {
+        const trainer = FIXED_TRAINERS.find(t => t.id === trainerId);
+        if (trainer) teamsToDisplay = trainer.teams;
+      }
+
+      teamsToDisplay.forEach(tm => {
+        const opt = document.createElement('option');
+        opt.value = `${tm.name}_${tm.category}`;
+        opt.textContent = `${tm.name} (${tm.category})`;
+        teamSel.appendChild(opt);
+      });
+    }
+
     function closePdfDateModal() {
       document.getElementById('pdfDateModal').classList.remove('active');
     }
 
     function generatePDF() {
+      const trainerFilter = document.getElementById('pdfTrainerFilter').value;
       const teamFilter = document.getElementById('pdfTeamFilter').value;
       const startDate = document.getElementById('pdfStartDate').value;
       const endDate = document.getElementById('pdfEndDate').value;
 
       if (!startDate || !endDate) {
-        alert('Por favor selecciona las fechas de inicio y fin.');
+        alert('Selecciona un rango de fechas.');
         return;
       }
 
       if (new Date(startDate) > new Date(endDate)) {
-        alert('La fecha de inicio no puede ser posterior a la fecha fin.');
+        alert('La fecha de inicio debe ser anterior a la fecha fin.');
         return;
       }
 
-      // Filtrar entrenamientos en el rango de fechas e iteración de categoría
+      // Filtrado exhaustivo por Entrenador, Equipo/Categoría y Fechas
       const filteredLogs = globalLogs.filter(log => {
-        const matchesTeam = teamFilter === 'ALL' || log.category === teamFilter;
+        let matchesTrainer = true;
+        if (trainerFilter !== 'ALL') {
+          const trObj = FIXED_TRAINERS.find(t => t.id === trainerFilter);
+          matchesTrainer = trObj && log.trainer === trObj.name;
+        }
+
+        let matchesTeam = true;
+        if (teamFilter !== 'ALL') {
+          const [tName, tCat] = teamFilter.split('_');
+          matchesTeam = (log.teamName === tName && log.category === tCat) || log.category === tCat;
+        }
+
         const matchesDate = log.date >= startDate && log.date <= endDate;
-        return matchesTeam && matchesDate;
+        return matchesTrainer && matchesTeam && matchesDate;
       }).sort((a, b) => new Date(a.date) - new Date(b.date));
 
       if (filteredLogs.length === 0) {
-        alert('No se encontraron entrenamientos registrados en el rango de fechas y equipo seleccionado.');
+        alert('No se encontraron entrenamientos con los filtros seleccionados.');
         return;
       }
 
-      // 1. Cabecera y Metadatos
-      document.getElementById('pdfTeamDisplay').textContent = teamFilter === 'ALL' ? 'Todos los Equipos' : `Equipo ${teamFilter}`;
+      const selectedTrainerObj = FIXED_TRAINERS.find(t => t.id === trainerFilter);
+      document.getElementById('pdfTrainerDisplay').textContent = selectedTrainerObj ? selectedTrainerObj.name : 'Todos';
+      
+      const teamSelectElem = document.getElementById('pdfTeamFilter');
+      document.getElementById('pdfTeamDisplay').textContent = teamSelectElem.options[teamSelectElem.selectedIndex].text;
+      
       document.getElementById('pdfStartDisplay').textContent = startDate;
       document.getElementById('pdfEndDisplay').textContent = endDate;
 
-      // 2. Procesar Datos por Jugadora
       const totalSessions = filteredLogs.length;
       const playerStats = {};
 
@@ -1301,7 +1466,6 @@
         });
       });
 
-      // Renderizar Tabla
       const pdfTbody = document.getElementById('pdfTableBody');
       pdfTbody.innerHTML = '';
 
@@ -1321,7 +1485,6 @@
         pdfTbody.appendChild(tr);
       });
 
-      // 3. Procesar Datos para los Gráficos
       const dateLabels = filteredLogs.map(l => l.date);
       const attendanceData = filteredLogs.map(l => l.records.filter(r => r.attendance === 'V').length);
       const qualityData = filteredLogs.map(l => {
@@ -1330,15 +1493,13 @@
         return validRatings.length > 0 ? (sum / validRatings.length).toFixed(1) : 0;
       });
 
-      // Renderizar Gráficos con Chart.js
       renderPdfCharts(dateLabels, attendanceData, qualityData);
 
-      // Esperar breve renderizado de canvas
       setTimeout(() => {
         const element = document.getElementById('pdfRenderArea');
         const opt = {
           margin:       0.3,
-          filename:     `Informe_Entrenamientos_NouVoleiAlzira_${startDate}_${endDate}.pdf`,
+          filename:     `Informe_Entrenamientos_NouVolei_${startDate}_${endDate}.pdf`,
           image:        { type: 'jpeg', quality: 0.98 },
           html2canvas:  { scale: 2, useCORS: true, logging: false },
           jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
@@ -1347,7 +1508,7 @@
         html2pdf().set(opt).from(element).save().then(() => {
           closePdfDateModal();
         });
-      }, 500);
+      }, 400);
     }
 
     function renderPdfCharts(labels, attendanceData, qualityData) {
@@ -1363,16 +1524,14 @@
             label: 'Jugadoras Presentes',
             data: attendanceData,
             backgroundColor: '#3b82f6',
-            borderRadius: 6
+            borderRadius: 4
           }]
         },
         options: {
           responsive: false,
           animation: false,
           plugins: { legend: { display: false } },
-          scales: {
-            y: { beginAtZero: true, ticks: { precision: 0 } }
-          }
+          scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
         }
       });
 
@@ -1388,7 +1547,7 @@
             backgroundColor: 'rgba(245, 158, 11, 0.15)',
             fill: true,
             tension: 0.3,
-            pointRadius: 4,
+            pointRadius: 3,
             pointBackgroundColor: '#f59e0b'
           }]
         },
@@ -1396,9 +1555,7 @@
           responsive: false,
           animation: false,
           plugins: { legend: { display: false } },
-          scales: {
-            y: { min: 0, max: 5, ticks: { stepSize: 1 } }
-          }
+          scales: { y: { min: 0, max: 5, ticks: { stepSize: 1 } } }
         }
       });
     }
