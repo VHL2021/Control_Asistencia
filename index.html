@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <title>Nou Volei Alzira - Control de Asistencia y Entrenamientos</title>
 
   <!-- Librerías externas para Generación de PDF y Gráficos -->
@@ -41,14 +41,12 @@
       flex-direction: column;
       touch-action: manipulation;
       -webkit-font-smoothing: antialiased;
-      padding-bottom: env(safe-area-inset-bottom);
     }
 
     header {
       background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
       color: white;
       padding: 1.5rem 1rem;
-      padding-top: calc(1.5rem + env(safe-area-inset-top));
       text-align: center;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
@@ -84,42 +82,15 @@
     }
 
     .selector-title {
-      margin-bottom: 0.75rem;
+      margin-bottom: 1.25rem;
       color: var(--text);
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
-
-    .trainer-select-wrapper {
-      max-width: 400px;
-      margin: 0 auto 1.25rem auto;
-    }
-
-    .trainer-select-wrapper select, select, input[type="text"], input[type="date"] {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      font-size: 16px; /* Evita zoom automático en iOS Safari */
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background-color: white;
-      color: var(--text);
-      appearance: none;
-      -webkit-appearance: none;
-    }
-
-    .trainer-select-wrapper select, select {
-      font-weight: 600;
-      color: var(--primary);
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231e3a8a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      background-size: 1.1em;
-      padding-right: 2.5rem;
+      font-size: 1.25rem;
+      font-weight: 800;
     }
 
     .teams-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1rem;
       justify-content: center;
       max-width: 900px;
@@ -208,7 +179,7 @@
     .btn-pdf { background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%); color: white; }
     .btn-pdf:active { opacity: 0.9; }
 
-    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.85rem; min-height: 40px; }
+    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.85rem; min-height: 38px; }
 
     .modal-overlay {
       position: fixed;
@@ -298,6 +269,15 @@
       white-space: nowrap;
     }
 
+    input[type="date"], input[type="text"], select {
+      padding: 0.5rem 0.75rem;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background-color: white;
+      color: var(--text);
+    }
+
     .modal-body {
       padding: 0.75rem;
       overflow-y: auto;
@@ -359,8 +339,7 @@
       cursor: pointer;
       font-weight: 700;
       font-size: 0.9rem;
-      min-height: 44px;
-      min-width: 44px;
+      min-height: 40px;
       touch-action: manipulation;
     }
 
@@ -376,7 +355,7 @@
     }
 
     .star {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       color: #cbd5e1;
       padding: 0.2rem;
       touch-action: manipulation;
@@ -392,8 +371,8 @@
     }
 
     .strike-box {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       border-radius: 6px;
       border: 1px solid #cbd5e1;
       display: flex;
@@ -523,12 +502,11 @@
       justify-content: space-between;
       align-items: center;
       gap: 0.5rem;
-      cursor: pointer;
-      transition: background 0.15s ease;
+      transition: background-color 0.2s;
     }
 
     .log-item:hover {
-      background: #f1f5f9;
+      background-color: #f1f5f9;
     }
 
     .log-item:last-child { border-bottom: none; }
@@ -549,8 +527,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 44px;
-      min-width: 44px;
     }
 
     .btn-delete-log:hover {
@@ -571,88 +547,65 @@
 
     .hidden-input { display: none; }
 
-    /* ESTILOS DE LA PLANTILLA DE PDF */
+    /* Estilos Plantilla PDF Compacta para 1 Página */
     #pdfTemplateContainer {
       position: absolute;
       left: -9999px;
       top: -9999px;
-      width: 790px;
+      width: 750px;
       background: #ffffff;
       color: #1e293b;
     }
 
-    .pdf-page {
-      width: 790px;
-      height: 1115px;
-      padding: 24px;
-      box-sizing: border-box;
-      background: #ffffff;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      page-break-after: always;
-    }
+    .pdf-render-box { padding: 20px; background: #ffffff; }
 
     .pdf-header {
       background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
       color: white;
-      padding: 14px 18px;
+      padding: 16px 20px;
       border-radius: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
 
-    .pdf-header h1 { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
-    .pdf-header p { font-size: 11px; color: #dbeafe; }
+    .pdf-header h1 { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+    .pdf-header p { font-size: 12px; color: #dbeafe; }
 
     .pdf-meta {
       display: flex;
       justify-content: space-between;
       background: #f1f5f9;
       border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 8px 14px;
-      margin-bottom: 12px;
+      border-radius: 10px;
+      padding: 10px 16px;
+      margin-bottom: 16px;
       font-size: 11px;
       font-weight: 600;
+      flex-wrap: wrap;
       gap: 10px;
     }
 
     .pdf-section-title {
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 700;
       color: #1e3a8a;
-      margin-bottom: 6px;
-      border-bottom: 1.5px solid #eff6ff;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #eff6ff;
       padding-bottom: 4px;
     }
 
-    .pdf-table-wrapper {
-      flex: 1;
-      overflow: hidden;
-      margin-bottom: 10px;
-    }
-
-    .pdf-table { width: 100%; border-collapse: collapse; font-size: 10px; }
-    .pdf-table th { background-color: #3b82f6; color: white; text-align: left; padding: 5px 8px; font-weight: 700; }
-    .pdf-table td { padding: 4px 8px; border-bottom: 1px solid #e2e8f0; }
+    .pdf-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 10px; }
+    .pdf-table th { background-color: #3b82f6; color: white; text-align: left; padding: 6px 8px; font-weight: 700; }
+    .pdf-table td { padding: 5px 8px; border-bottom: 1px solid #e2e8f0; }
     .pdf-table tr:nth-child(even) { background-color: #f8fafc; }
 
-    .pdf-charts-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; height: 180px; }
-    .pdf-chart-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .pdf-chart-card h4 { font-size: 10px; text-align: center; color: #334155; margin-bottom: 4px; }
-    .pdf-chart-card canvas { width: 340px !important; height: 140px !important; }
-
-    @media (max-width: 640px) {
-      main { padding: 0.5rem; }
-      .selector-container, .logs-section { padding: 0.85rem; }
-      .logs-header { flex-direction: column; align-items: stretch; }
-      .logs-title-group, .logs-actions-right { width: 100%; justify-content: space-between; }
-      .logs-actions-right button { flex: 1; font-size: 0.78rem; padding: 0.4rem 0.2rem; }
-      .btn { min-height: 44px; width: 100%; justify-content: center; }
-      .roster-actions { width: 100%; }
-      .roster-actions .btn { flex: 1; font-size: 0.8rem; }
-      .modal-footer { flex-direction: column; }
-      .modal-footer button { width: 100%; }
+    .pdf-charts-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .pdf-chart-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; }
+    .pdf-chart-card h4 { font-size: 11px; text-align: center; color: #334155; margin-bottom: 6px; }
+    
+    /* Efecto Drag & Drop */
+    tr.drag-over {
+      background-color: #f1f5f9;
+      border: 2px dashed var(--primary-light);
     }
   </style>
 </head>
@@ -665,19 +618,12 @@
 
   <main>
     <div class="selector-container">
-      <p class="selector-title">Selección Entrenador</p>
-      <div class="trainer-select-wrapper">
-        <select id="trainerSelector" onchange="onTrainerSelected()">
-          <!-- Opciones de entrenadores fijos -->
-        </select>
-      </div>
-
+      <p class="selector-title">Equipos de Eneritz</p>
       <div class="teams-grid" id="teamsGridContainer">
         <!-- Tarjetas dinámicas de equipos -->
       </div>
     </div>
 
-    <!-- SECCIÓN DE HISTÓRICO CON FILTRADO DINÁMICO POR ENTRENADOR -->
     <section class="logs-section">
       <div class="logs-header">
         <div class="logs-title-group">
@@ -685,6 +631,7 @@
           <button class="btn btn-pdf btn-sm" onclick="openPdfDateModal()">📄 Generar Informe PDF</button>
         </div>
         <div class="logs-actions-right">
+          <button class="btn btn-danger btn-sm" onclick="deleteAllLogs()">🗑️ Borrar Todos</button>
           <button class="btn btn-secondary btn-sm" onclick="triggerLoadHistoryTxt()">📥 Cargar Histórico</button>
           <button class="btn btn-success btn-sm" onclick="exportLogsToTxt()">💾 Descargar Histórico (.txt)</button>
           <input type="file" id="historyTxtFileInput" class="hidden-input" accept=".txt" onchange="handleHistoryTxtFile(event)">
@@ -696,7 +643,6 @@
     </section>
   </main>
 
-  <!-- Modal de Registro de Asistencia -->
   <div class="modal-overlay" id="attendanceModal">
     <div class="modal-container">
       <div class="modal-header">
@@ -725,16 +671,29 @@
                 <th class="col-name">Jugadora</th>
                 <th class="col-att">
                   Asistencia<br>
-                  <span style="font-weight:normal; font-size: 0.75rem; cursor:pointer; color:var(--primary-light)" onclick="bulkSetAttendance('V')">[Todos V]</span>
-                  <span style="font-weight:normal; font-size: 0.75rem; cursor:pointer; color:var(--danger)" onclick="bulkSetAttendance('X')">[Todos X]</span>
+                  <div class="att-toggle" style="transform: scale(0.85); margin-top: 4px;">
+                    <button type="button" class="att-btn" onclick="bulkSetAttendance('V')">V</button>
+                    <button type="button" class="att-btn" onclick="bulkSetAttendance('X')">X</button>
+                  </div>
                 </th>
                 <th class="col-rating">
-                  Calidad (0-5★)<br>
-                  <span style="font-weight:normal; font-size: 0.75rem; cursor:pointer; color:var(--accent)" onclick="bulkSetRating(5)">[Todas 5★]</span>
+                  Calidad<br>
+                  <div class="star-rating" style="transform: scale(0.7); margin-top: 4px;">
+                    <span class="star filled" onclick="bulkSetRating(1)">★</span>
+                    <span class="star filled" onclick="bulkSetRating(2)">★</span>
+                    <span class="star filled" onclick="bulkSetRating(3)">★</span>
+                    <span class="star filled" onclick="bulkSetRating(4)">★</span>
+                    <span class="star filled" onclick="bulkSetRating(5)">★</span>
+                  </div>
                 </th>
                 <th class="col-strikes">
                   Strikes<br>
-                  <span style="font-weight:normal; font-size: 0.75rem; cursor:pointer; color:var(--text-muted)" onclick="bulkClearStrikes()">[Reset]</span>
+                  <div class="strikes-container" style="transform: scale(0.85); margin-top: 4px;">
+                    <div class="strike-box" onclick="bulkSetStrikes(1)">X</div>
+                    <div class="strike-box" onclick="bulkSetStrikes(2)">X</div>
+                    <div class="strike-box" onclick="bulkSetStrikes(3)">X</div>
+                    <div class="strike-box" onclick="bulkSetStrikes(0)" style="font-size: 0.7rem; color: var(--success); border-color: var(--success);">0</div>
+                  </div>
                 </th>
                 <th class="col-comment">Comentarios / Justificación</th>
                 <th style="width: 40px;"></th>
@@ -747,12 +706,11 @@
 
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeAttendanceModal()">Cancelar</button>
-        <button class="btn btn-success" onclick="saveSession()">💾 Guardar / Modificar Entrenamiento</button>
+        <button class="btn btn-success" onclick="saveSession()">💾 Registrar Entrenamiento</button>
       </div>
     </div>
   </div>
 
-  <!-- Submodal Justificación -->
   <div class="submodal-overlay" id="justificationModal">
     <div class="submodal-card">
       <h4 id="justificationPlayerName">Justificación de Falta</h4>
@@ -764,17 +722,16 @@
     </div>
   </div>
 
-  <!-- Submodal PDF -->
   <div class="submodal-overlay" id="pdfDateModal">
     <div class="submodal-card">
       <h4>Generar Informe PDF</h4>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Filtra por entrenador, equipo y rango de fechas para generar el documento.</p>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Filtra por equipo y rango de fechas para generar el documento en 1 página.</p>
       
       <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem;">
-        <div>
-          <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Entrenador:</label>
-          <select id="pdfTrainerFilter" onchange="onPdfTrainerSelected()" style="width: 100%;">
-            <!-- Dinámico -->
+        <!-- Entrenador oculto (solo Eneritz) -->
+        <div style="display: none;">
+          <select id="pdfTrainerFilter" onchange="onPdfTrainerSelected()">
+            <option value="ALL">Todos los Entrenadores</option>
           </select>
         </div>
         <div>
@@ -800,30 +757,48 @@
     </div>
   </div>
 
-  <!-- Contenedor Oculto para Generación del PDF -->
-  <div id="pdfTemplateContainer"></div>
+  <div id="pdfTemplateContainer">
+    <div class="pdf-render-box" id="pdfRenderArea">
+      <div class="pdf-header">
+        <h1 id="pdfTitleDisplay">Informe de Rendimiento y Asistencia</h1>
+        <p>Club Nou Volei Alzira • Resumen de Entrenamientos</p>
+      </div>
+
+      <div class="pdf-meta">
+        <div><strong>Entrenador:</strong> <span id="pdfTrainerDisplay">-</span></div>
+        <div><strong>Equipo:</strong> <span id="pdfTeamDisplay">-</span></div>
+        <div><strong>Periodo:</strong> <span id="pdfStartDisplay">-</span> a <span id="pdfEndDisplay">-</span></div>
+      </div>
+
+      <div class="pdf-section-title">📊 Estadísticas Individuales de Jugadoras</div>
+      <table class="pdf-table">
+        <thead>
+          <tr>
+            <th>Jugadora</th>
+            <th style="text-align: center;">Asistencia</th>
+            <th style="text-align: center;">Media Calidad</th>
+            <th style="text-align: center;">Total Strikes</th>
+          </tr>
+        </thead>
+        <tbody id="pdfTableBody"></tbody>
+      </table>
+
+      <div class="pdf-section-title" style="margin-top: 10px;">📈 Análisis General del Periodo</div>
+      <div class="pdf-charts-container">
+        <div class="pdf-chart-card">
+          <h4>Asistencia (Jugadoras por Día)</h4>
+          <canvas id="pdfAttendanceChart" width="320" height="120"></canvas>
+        </div>
+        <div class="pdf-chart-card">
+          <h4>Media de Calidad del Entrenamiento (★)</h4>
+          <canvas id="pdfQualityChart" width="320" height="120"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     const FIXED_TRAINERS = [
-      {
-        id: 'abel',
-        name: 'Abel',
-        teams: [
-          { name: 'Enova', category: 'Infantil' },
-          { name: 'Enova', category: 'Cadete' },
-          { name: 'Espai Laboral', category: 'Juvenil' },
-          { name: 'Enova', category: 'Senior' }
-        ]
-      },
-      {
-        id: 'salva',
-        name: 'Salva',
-        teams: [
-          { name: 'Up! School', category: 'Infantil' },
-          { name: 'Up! School', category: 'Cadete' },
-          { name: 'Escuela', category: 'Escuela' }
-        ]
-      },
       {
         id: 'eneritz',
         name: 'Eneritz',
@@ -831,25 +806,20 @@
           { name: 'Jessi Esparza', category: 'Infantil' },
           { name: 'Jessi Esparza', category: 'Cadete' }
         ]
-      },
-      {
-        id: 'nicolas',
-        name: 'Nicolas',
-        teams: [
-          { name: 'Alevin', category: 'Alevin' }
-        ]
       }
     ];
 
     let currentTeamName = '';
     let currentCategory = '';
-    let currentTrainerName = '';
+    let currentTrainerName = 'Eneritz';
     let playersData = [];
     let activeJustificationIndex = null;
     let globalLogs = [];
-    let activeEditingLogId = null;
+    let editingLogId = null;
+    let dragSrcElIndex = null;
 
-    let pdfChartInstances = [];
+    let attChartInstance = null;
+    let qualChartInstance = null;
 
     document.addEventListener('DOMContentLoaded', () => {
       const today = new Date().toISOString().split('T')[0];
@@ -859,40 +829,19 @@
       if (savedLogs) {
         try {
           globalLogs = JSON.parse(savedLogs);
+          renderLogs();
         } catch(e) {
           console.error("Error cargando logs", e);
         }
       }
 
-      populateTrainerSelector();
+      loadTrainerTeams();
     });
 
-    function populateTrainerSelector() {
-      const selector = document.getElementById('trainerSelector');
-      selector.innerHTML = '';
-
-      FIXED_TRAINERS.forEach(t => {
-        const opt = document.createElement('option');
-        opt.value = t.id;
-        opt.textContent = t.name;
-        selector.appendChild(opt);
-      });
-
-      if (FIXED_TRAINERS.length > 0) {
-        selector.value = FIXED_TRAINERS[0].id;
-        onTrainerSelected();
-      }
-    }
-
-    function onTrainerSelected() {
-      const selectedId = document.getElementById('trainerSelector').value;
+    function loadTrainerTeams() {
       const container = document.getElementById('teamsGridContainer');
       container.innerHTML = '';
-
-      const trainer = FIXED_TRAINERS.find(t => t.id === selectedId);
-      if (!trainer || !trainer.teams) return;
-
-      currentTrainerName = trainer.name;
+      const trainer = FIXED_TRAINERS[0];
 
       trainer.teams.forEach(team => {
         const card = document.createElement('div');
@@ -907,54 +856,55 @@
         `;
         container.appendChild(card);
       });
-
-      renderLogs();
     }
 
-    function openAttendanceModal(teamName, category, existingLog = null) {
+    function openAttendanceModal(teamName, category) {
+      editingLogId = null;
       currentTeamName = teamName;
       currentCategory = category;
-
-      if (existingLog) {
-        activeEditingLogId = existingLog.id;
-        document.getElementById('modalTitle').textContent = `Modificar: ${teamName} (${category})`;
-        document.getElementById('sessionDate').value = existingLog.date;
-        if (existingLog.trainer) currentTrainerName = existingLog.trainer;
-
-        playersData = existingLog.records.map(r => ({
-          name: r.name,
-          attendance: r.attendance || 'V',
-          rating: r.rating !== undefined ? r.rating : 5,
-          strikes: r.strikes || 0,
-          comment: r.comment || ''
-        }));
-      } else {
-        activeEditingLogId = null;
-        document.getElementById('modalTitle').textContent = `Registro: ${teamName} (${category})`;
-        
-        const storageKey = `nva_roster_${teamName}_${category}`;
-        const savedRoster = localStorage.getItem(storageKey);
-        let playerNames = [];
-        
-        if (savedRoster) {
-          try { playerNames = JSON.parse(savedRoster); } catch(e) { playerNames = []; }
+      document.getElementById('modalTitle').textContent = `Registro: ${teamName} (${category})`;
+      document.getElementById('sessionDate').value = new Date().toISOString().split('T')[0];
+      
+      const storageKey = `nva_roster_${teamName}_${category}`;
+      const savedRoster = localStorage.getItem(storageKey);
+      let playerNames = [];
+      
+      if (savedRoster) {
+        try {
+          playerNames = JSON.parse(savedRoster);
+        } catch(e) {
+          playerNames = [];
         }
-
-        playersData = playerNames.map(name => ({
-          name: name,
-          attendance: 'V',
-          rating: 5,
-          strikes: 0,
-          comment: ''
-        }));
       }
+
+      playersData = playerNames.map(name => ({
+        name: name,
+        attendance: 'V',
+        rating: 5,
+        strikes: 0,
+        comment: ''
+      }));
 
       renderTable();
       document.getElementById('attendanceModal').classList.add('active');
     }
 
+    function editLog(id) {
+      const log = globalLogs.find(l => l.id === id);
+      if (!log) return;
+      editingLogId = id;
+      currentTeamName = log.teamName;
+      currentCategory = log.category;
+      currentTrainerName = log.trainer || 'Eneritz';
+      document.getElementById('sessionDate').value = log.date;
+      document.getElementById('modalTitle').textContent = `Editar Registro: ${currentTeamName} (${currentCategory})`;
+      
+      playersData = JSON.parse(JSON.stringify(log.records));
+      renderTable();
+      document.getElementById('attendanceModal').classList.add('active');
+    }
+
     function closeAttendanceModal() {
-      activeEditingLogId = null;
       document.getElementById('attendanceModal').classList.remove('active');
     }
 
@@ -964,6 +914,38 @@
 
       playersData.forEach((player, idx) => {
         const tr = document.createElement('tr');
+        tr.draggable = true;
+        tr.style.cursor = 'grab';
+
+        // Eventos Drag & Drop
+        tr.ondragstart = function(e) {
+          dragSrcElIndex = idx;
+          e.dataTransfer.effectAllowed = 'move';
+          this.style.opacity = '0.5';
+        };
+        tr.ondragover = function(e) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          this.classList.add('drag-over');
+        };
+        tr.ondragleave = function(e) {
+          this.classList.remove('drag-over');
+        };
+        tr.ondrop = function(e) {
+          e.stopPropagation();
+          this.classList.remove('drag-over');
+          if (dragSrcElIndex !== null && dragSrcElIndex !== idx) {
+            const movedItem = playersData.splice(dragSrcElIndex, 1)[0];
+            playersData.splice(idx, 0, movedItem);
+            saveCurrentRosterToLocalStorage();
+            renderTable();
+          }
+          return false;
+        };
+        tr.ondragend = function(e) {
+          this.style.opacity = '1';
+          renderTable();
+        };
 
         const tdName = document.createElement('td');
         tdName.innerHTML = `<strong style="cursor:pointer;" onclick="editPlayerName(${idx})" title="Editar nombre">${escapeHtml(player.name)}</strong>`;
@@ -999,7 +981,7 @@
         tr.appendChild(tdComment);
 
         const tdAction = document.createElement('td');
-        tdAction.innerHTML = `<button type="button" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:1.2rem; min-height:44px; min-width:30px;" onclick="removePlayer(${idx})" title="Eliminar">&times;</button>`;
+        tdAction.innerHTML = `<button type="button" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:1.2rem; min-height:40px; min-width:30px;" onclick="removePlayer(${idx})" title="Eliminar">&times;</button>`;
         tr.appendChild(tdAction);
 
         tbody.appendChild(tr);
@@ -1095,8 +1077,8 @@
       renderTable();
     }
 
-    function bulkClearStrikes() {
-      playersData.forEach(p => p.strikes = 0);
+    function bulkSetStrikes(strikes) {
+      playersData.forEach(p => p.strikes = strikes);
       renderTable();
     }
 
@@ -1164,50 +1146,39 @@
         return;
       }
 
-      if (activeEditingLogId) {
-        const index = globalLogs.findIndex(l => l.id === activeEditingLogId);
-        if (index !== -1) {
-          globalLogs[index].date = dateVal;
-          globalLogs[index].trainer = currentTrainerName;
-          globalLogs[index].records = playersData.map(p => ({ ...p }));
-          localStorage.setItem('nva_logs', JSON.stringify(globalLogs));
-          renderLogs();
-          closeAttendanceModal();
-          alert('Registro modificado con éxito.');
-          return;
+      if (editingLogId) {
+        const idx = globalLogs.findIndex(l => l.id === editingLogId);
+        if (idx !== -1) {
+          globalLogs[idx].date = dateVal;
+          globalLogs[idx].records = JSON.parse(JSON.stringify(playersData));
+          globalLogs[idx].timestamp = new Date().toISOString();
         }
+        editingLogId = null;
+      } else {
+        const isDuplicate = globalLogs.some(log => 
+          log.date === dateVal &&
+          log.teamName === currentTeamName &&
+          log.category === currentCategory
+        );
+
+        if (isDuplicate) {
+          if (!confirm('Ya existe una sesión para este Equipo y Fecha. ¿Deseas volver a registrarla de todos modos?')) {
+            return;
+          }
+        }
+
+        const sessionRecord = {
+          id: 's_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+          timestamp: new Date().toISOString(),
+          date: dateVal,
+          trainer: currentTrainerName,
+          teamName: currentTeamName,
+          category: currentCategory,
+          records: JSON.parse(JSON.stringify(playersData))
+        };
+        globalLogs.unshift(sessionRecord);
       }
 
-      const isDuplicate = globalLogs.some(log => 
-        log.date === dateVal &&
-        log.teamName === currentTeamName &&
-        log.category === currentCategory &&
-        log.trainer === currentTrainerName
-      );
-
-      if (isDuplicate) {
-        if (!confirm('Ya existe una sesión para este Equipo, Categoría, Entrenador y Fecha. ¿Deseas volver a registrarla de todos modos?')) {
-          return;
-        }
-      }
-
-      const sessionRecord = {
-        id: 's_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-        timestamp: new Date().toISOString(),
-        date: dateVal,
-        trainer: currentTrainerName,
-        teamName: currentTeamName,
-        category: currentCategory,
-        records: playersData.map(p => ({
-          name: p.name,
-          attendance: p.attendance,
-          rating: p.rating,
-          strikes: p.strikes,
-          comment: p.comment
-        }))
-      };
-
-      globalLogs.unshift(sessionRecord);
       localStorage.setItem('nva_logs', JSON.stringify(globalLogs));
       
       saveCurrentRosterToLocalStorage();
@@ -1218,15 +1189,13 @@
 
     function renderLogs() {
       const container = document.getElementById('logsContainer');
-      const filteredLogs = globalLogs.filter(log => log.trainer === currentTrainerName);
-
-      if (filteredLogs.length === 0) {
-        container.innerHTML = `<div class="log-item" style="color: #94a3b8;">No hay sesiones guardadas para ${escapeHtml(currentTrainerName)}.</div>`;
+      if (globalLogs.length === 0) {
+        container.innerHTML = '<div class="log-item" style="color: #94a3b8;">No hay sesiones guardadas en el histórico.</div>';
         return;
       }
 
       container.innerHTML = '';
-      filteredLogs.forEach((log) => {
+      globalLogs.forEach((log) => {
         const div = document.createElement('div');
         div.className = 'log-item';
 
@@ -1236,14 +1205,14 @@
         const displayTeam = log.teamName ? `${log.teamName} (${log.category})` : log.category;
 
         div.innerHTML = `
-          <div class="log-item-content" onclick="openLogForEditing('${log.id}')">
+          <div class="log-item-content" style="cursor: pointer;" onclick="editLog('${log.id}')" title="Clic para ver o modificar">
             <span class="badge badge-tag">${escapeHtml(displayTeam)}</span>
             <strong>[${log.date}]</strong><br>
             <span style="color:var(--text-muted); font-size:0.8rem;">
               ✓ ${totalV} Presentes | ✗ ${totalX} Ausentes | Total: ${log.records.length} jugadoras
             </span>
           </div>
-          <button class="btn-delete-log" title="Eliminar este registro" onclick="event.stopPropagation(); deleteSingleLog('${log.id}')">
+          <button class="btn-delete-log" title="Eliminar este registro" onclick="deleteSingleLog(event, '${log.id}')">
             🗑️
           </button>
         `;
@@ -1251,22 +1220,24 @@
       });
     }
 
-    function openLogForEditing(logId) {
-      const log = globalLogs.find(l => l.id === logId);
-      if (!log) return;
-      openAttendanceModal(log.teamName, log.category, log);
-    }
-
-    function deleteSingleLog(id) {
+    function deleteSingleLog(event, id) {
+      event.stopPropagation();
       const targetLog = globalLogs.find(l => l.id === id);
       if (!targetLog) return;
 
       const teamStr = targetLog.teamName ? `${targetLog.teamName} (${targetLog.category})` : targetLog.category;
-      const confirmMsg = `⚠️ ADVERTENCIA DE SEGURIDAD ⚠️\n\n¿Estás seguro de que deseas eliminar permanentemente este registro?\n\n- Fecha: ${targetLog.date}\n- Equipo: ${teamStr}\n- Entrenador: ${targetLog.trainer || 'N/A'}`;
-
-      if (confirm(confirmMsg)) {
+      if (confirm(`⚠️ ¿Estás seguro de que deseas eliminar permanentemente este registro?\n\n- Fecha: ${targetLog.date}\n- Equipo: ${teamStr}`)) {
         globalLogs = globalLogs.filter(l => l.id !== id);
         localStorage.setItem('nva_logs', JSON.stringify(globalLogs));
+        renderLogs();
+      }
+    }
+
+    function deleteAllLogs() {
+      if (globalLogs.length === 0) return;
+      if (confirm('⚠️ ADVERTENCIA ⚠️\n\n¿Estás seguro de que deseas eliminar TODOS los registros guardados?\nEsta acción no se puede deshacer.')) {
+        globalLogs = [];
+        localStorage.removeItem('nva_logs');
         renderLogs();
       }
     }
@@ -1305,7 +1276,7 @@
         if (dateMatch) {
           const dateVal = dateMatch[1].trim();
           const rawTeam = teamMatch ? teamMatch[1].trim() : 'Equipo General';
-          const trainerVal = trainerMatch ? trainerMatch[1].trim() : 'Sin Especificar';
+          const trainerVal = trainerMatch ? trainerMatch[1].trim() : 'Eneritz';
 
           let teamName = rawTeam;
           let category = rawTeam;
@@ -1319,8 +1290,7 @@
           const isDuplicate = globalLogs.some(log => 
             log.date === dateVal && 
             log.teamName === teamName && 
-            log.category === category && 
-            log.trainer === trainerVal
+            log.category === category
           );
 
           if (isDuplicate) {
@@ -1379,7 +1349,7 @@
 
       globalLogs.forEach((log) => {
         const teamStr = log.teamName ? `${log.teamName} (${log.category})` : log.category;
-        textContent += `FECHA: ${log.date}  | EQUIPO: ${teamStr} | ENTRENADOR: ${log.trainer || 'N/A'}\n`;
+        textContent += `FECHA: ${log.date}  | EQUIPO: ${teamStr} | ENTRENADOR: ${log.trainer || 'Eneritz'}\n`;
         textContent += `----------------------------------------------------\n`;
         textContent += `JUGADORA             | ASIST. | CALIF. | STRIKES | COMENTARIOS\n`;
         textContent += `----------------------------------------------------\n`;
@@ -1427,16 +1397,15 @@
         return;
       }
 
-      const trainerSel = document.getElementById('pdfTrainerFilter');
-      trainerSel.innerHTML = '<option value="ALL">Todos los Entrenadores</option>';
-      FIXED_TRAINERS.forEach(t => {
-        const opt = document.createElement('option');
-        opt.value = t.id;
-        opt.textContent = t.name;
-        trainerSel.appendChild(opt);
-      });
+      const teamSel = document.getElementById('pdfTeamFilter');
+      teamSel.innerHTML = '<option value="ALL">Todos los Equipos</option>';
 
-      onPdfTrainerSelected();
+      FIXED_TRAINERS[0].teams.forEach(tm => {
+        const opt = document.createElement('option');
+        opt.value = `${tm.name}_${tm.category}`;
+        opt.textContent = `${tm.name} (${tm.category})`;
+        teamSel.appendChild(opt);
+      });
 
       const sortedLogs = [...globalLogs].sort((a, b) => new Date(a.date) - new Date(b.date));
       document.getElementById('pdfStartDate').value = sortedLogs[0].date;
@@ -1445,35 +1414,11 @@
       document.getElementById('pdfDateModal').classList.add('active');
     }
 
-    function onPdfTrainerSelected() {
-      const trainerId = document.getElementById('pdfTrainerFilter').value;
-      const teamSel = document.getElementById('pdfTeamFilter');
-      teamSel.innerHTML = '<option value="ALL">Todos los Equipos</option>';
-
-      let teamsToDisplay = [];
-
-      if (trainerId === 'ALL') {
-        FIXED_TRAINERS.forEach(t => teamsToDisplay.push(...t.teams));
-      } else {
-        const trainer = FIXED_TRAINERS.find(t => t.id === trainerId);
-        if (trainer) teamsToDisplay = trainer.teams;
-      }
-
-      teamsToDisplay.forEach(tm => {
-        const opt = document.createElement('option');
-        opt.value = `${tm.name}_${tm.category}`;
-        opt.textContent = `${tm.name} (${tm.category})`;
-        teamSel.appendChild(opt);
-      });
-    }
-
     function closePdfDateModal() {
       document.getElementById('pdfDateModal').classList.remove('active');
     }
 
-    /* GENERACIÓN DE PDF REFACTORIZADA Y OPTIMIZADA PARA MOSTRAR EXACTAMENTE LOS DATOS FILTRADOS */
     function generatePDF() {
-      const trainerFilter = document.getElementById('pdfTrainerFilter').value;
       const teamFilter = document.getElementById('pdfTeamFilter').value;
       const startDate = document.getElementById('pdfStartDate').value;
       const endDate = document.getElementById('pdfEndDate').value;
@@ -1488,19 +1433,7 @@
         return;
       }
 
-      // Obtener el nombre del entrenador seleccionado para el informe
-      let trainerDisplayName = "Todos los Entrenadores";
-      if (trainerFilter !== 'ALL') {
-        const trObj = FIXED_TRAINERS.find(t => t.id === trainerFilter);
-        if (trObj) trainerDisplayName = trObj.name;
-      }
-
       const filteredLogs = globalLogs.filter(log => {
-        let matchesTrainer = true;
-        if (trainerFilter !== 'ALL') {
-          matchesTrainer = log.trainer === trainerDisplayName;
-        }
-
         let matchesTeam = true;
         if (teamFilter !== 'ALL') {
           const [tName, tCat] = teamFilter.split('_');
@@ -1508,7 +1441,7 @@
         }
 
         const matchesDate = log.date >= startDate && log.date <= endDate;
-        return matchesTrainer && matchesTeam && matchesDate;
+        return matchesTeam && matchesDate;
       }).sort((a, b) => new Date(a.date) - new Date(b.date));
 
       if (filteredLogs.length === 0) {
@@ -1516,171 +1449,136 @@
         return;
       }
 
-      const groupedByTeam = {};
+      document.getElementById('pdfTrainerDisplay').textContent = 'Eneritz';
+      
+      const teamSelectElem = document.getElementById('pdfTeamFilter');
+      document.getElementById('pdfTeamDisplay').textContent = teamSelectElem.options[teamSelectElem.selectedIndex].text;
+      
+      document.getElementById('pdfStartDisplay').textContent = startDate;
+      document.getElementById('pdfEndDisplay').textContent = endDate;
+
+      const totalSessions = filteredLogs.length;
+      const playerStats = {};
+
       filteredLogs.forEach(log => {
-        const key = `${log.teamName || 'Equipo'} (${log.category})`;
-        if (!groupedByTeam[key]) {
-          groupedByTeam[key] = {
-            teamName: log.teamName || 'Equipo',
-            category: log.category,
-            trainer: log.trainer || trainerDisplayName,
-            logs: []
-          };
-        }
-        groupedByTeam[key].logs.push(log);
+        log.records.forEach(r => {
+          if (!playerStats[r.name]) {
+            playerStats[r.name] = {
+              attendances: 0,
+              totalRating: 0,
+              ratingCount: 0,
+              totalStrikes: 0
+            };
+          }
+
+          if (r.attendance === 'V') {
+            playerStats[r.name].attendances += 1;
+          }
+
+          if (r.rating !== undefined && r.rating !== null) {
+            playerStats[r.name].totalRating += Number(r.rating);
+            playerStats[r.name].ratingCount += 1;
+          }
+
+          if (r.strikes) {
+            playerStats[r.name].totalStrikes += Number(r.strikes);
+          }
+        });
       });
 
-      pdfChartInstances.forEach(chart => chart.destroy());
-      pdfChartInstances = [];
+      const pdfTbody = document.getElementById('pdfTableBody');
+      pdfTbody.innerHTML = '';
 
-      const pdfContainer = document.getElementById('pdfTemplateContainer');
-      pdfContainer.innerHTML = '';
+      Object.keys(playerStats).sort().forEach(pName => {
+        const stats = playerStats[pName];
+        const avgRating = stats.ratingCount > 0 ? (stats.totalRating / stats.ratingCount).toFixed(1) : '0.0';
 
-      let pageIndex = 0;
-
-      Object.keys(groupedByTeam).forEach(teamKey => {
-        const group = groupedByTeam[teamKey];
-        const totalSessions = group.logs.length;
-        const playerStats = {};
-
-        group.logs.forEach(log => {
-          log.records.forEach(r => {
-            if (!playerStats[r.name]) {
-              playerStats[r.name] = { attendances: 0, totalRating: 0, ratingCount: 0, totalStrikes: 0 };
-            }
-            if (r.attendance === 'V') playerStats[r.name].attendances += 1;
-            if (r.rating !== undefined && r.rating !== null) {
-              playerStats[r.name].totalRating += Number(r.rating);
-              playerStats[r.name].ratingCount += 1;
-            }
-            if (r.strikes) playerStats[r.name].totalStrikes += Number(r.strikes);
-          });
-        });
-
-        const attCanvasId = `pdfAttChart_${pageIndex}`;
-        const qualCanvasId = `pdfQualChart_${pageIndex}`;
-
-        const pageDiv = document.createElement('div');
-        pageDiv.className = 'pdf-page';
-        pageDiv.innerHTML = `
-          <div>
-            <div class="pdf-header">
-              <h1>Informe de Rendimiento y Asistencia</h1>
-              <p>Club Nou Volei Alzira • Resumen de Entrenamientos</p>
-            </div>
-
-            <div class="pdf-meta">
-              <div><strong>Entrenador:</strong> <span>${escapeHtml(group.trainer)}</span></div>
-              <div><strong>Equipo:</strong> <span>${escapeHtml(teamKey)}</span></div>
-              <div><strong>Periodo:</strong> <span>${startDate}</span> a <span>${endDate}</span></div>
-            </div>
-
-            <div class="pdf-section-title">📊 Estadísticas Individuales de Jugadoras</div>
-            <div class="pdf-table-wrapper">
-              <table class="pdf-table">
-                <thead>
-                  <tr>
-                    <th>Jugadora</th>
-                    <th style="text-align: center;">Asistencia</th>
-                    <th style="text-align: center;">Media Calidad</th>
-                    <th style="text-align: center;">Total Strikes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${Object.keys(playerStats).sort().map(pName => {
-                    const stats = playerStats[pName];
-                    const avgRating = stats.ratingCount > 0 ? (stats.totalRating / stats.ratingCount).toFixed(1) : '0.0';
-                    return `
-                      <tr>
-                        <td><strong>${escapeHtml(pName)}</strong></td>
-                        <td style="text-align: center;"><strong>${stats.attendances}</strong> / ${totalSessions}</td>
-                        <td style="text-align: center; color: #d97706;">★ ${avgRating}</td>
-                        <td style="text-align: center; color: ${stats.totalStrikes > 0 ? '#dc2626' : '#64748b'};">
-                          ${stats.totalStrikes > 0 ? '❌ '.repeat(stats.totalStrikes) : '0'}
-                        </td>
-                      </tr>
-                    `;
-                  }).join('')}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div>
-            <div class="pdf-section-title">📈 Análisis General del Periodo</div>
-            <div class="pdf-charts-container">
-              <div class="pdf-chart-card">
-                <h4>Asistencia (Jugadoras por Día)</h4>
-                <canvas id="${attCanvasId}"></canvas>
-              </div>
-              <div class="pdf-chart-card">
-                <h4>Media Calidad (★)</h4>
-                <canvas id="${qualCanvasId}"></canvas>
-              </div>
-            </div>
-          </div>
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${escapeHtml(pName)}</strong></td>
+          <td style="text-align: center;"><strong>${stats.attendances}</strong> / ${totalSessions}</td>
+          <td style="text-align: center; color: #d97706;">★ ${avgRating}</td>
+          <td style="text-align: center; color: ${stats.totalStrikes > 0 ? '#dc2626' : '#64748b'};">
+            ${stats.totalStrikes > 0 ? '❌ '.repeat(stats.totalStrikes) : '0'}
+          </td>
         `;
-
-        pdfContainer.appendChild(pageDiv);
-
-        const dateLabels = group.logs.map(l => l.date);
-        const attendanceData = group.logs.map(l => l.records.filter(r => r.attendance === 'V').length);
-        const qualityData = group.logs.map(l => {
-          const validRatings = l.records.map(r => Number(r.rating) || 0);
-          const sum = validRatings.reduce((acc, curr) => acc + curr, 0);
-          return validRatings.length > 0 ? (sum / validRatings.length).toFixed(1) : 0;
-        });
-
-        setTimeout(() => {
-          const ctxAtt = document.getElementById(attCanvasId).getContext('2d');
-          const chartAtt = new Chart(ctxAtt, {
-            type: 'bar',
-            data: { labels: dateLabels, datasets: [{ label: 'Presentes', data: attendanceData, backgroundColor: '#3b82f6', borderRadius: 3 }] },
-            options: { responsive: false, animation: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
-          });
-
-          const ctxQual = document.getElementById(qualCanvasId).getContext('2d');
-          const chartQual = new Chart(ctxQual, {
-            type: 'line',
-            data: { labels: dateLabels, datasets: [{ label: 'Media', data: qualityData, borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.15)', fill: true, tension: 0.3 }] },
-            options: { responsive: false, animation: false, plugins: { legend: { display: false } }, scales: { y: { min: 0, max: 5, ticks: { stepSize: 1 } } } }
-          });
-
-          pdfChartInstances.push(chartAtt, chartQual);
-        }, 50);
-
-        pageIndex++;
+        pdfTbody.appendChild(tr);
       });
 
-      // Hacer visible el contenedor temporalmente para que html2canvas capture todo el DOM
-      setTimeout(() => {
-        const element = document.getElementById('pdfTemplateContainer');
-        element.style.position = 'fixed';
-        element.style.left = '0';
-        element.style.top = '0';
-        element.style.zIndex = '99999';
-        element.style.background = '#ffffff';
+      const dateLabels = filteredLogs.map(l => l.date);
+      const attendanceData = filteredLogs.map(l => l.records.filter(r => r.attendance === 'V').length);
+      const qualityData = filteredLogs.map(l => {
+        const validRatings = l.records.map(r => Number(r.rating) || 0);
+        const sum = validRatings.reduce((acc, curr) => acc + curr, 0);
+        return validRatings.length > 0 ? (sum / validRatings.length).toFixed(1) : 0;
+      });
 
+      renderPdfCharts(dateLabels, attendanceData, qualityData);
+
+      setTimeout(() => {
+        const element = document.getElementById('pdfRenderArea');
         const opt = {
-          margin:       0,
-          filename:     `Informe_Entrenamientos_NouVolei_${startDate}_${endDate}.pdf`,
+          margin:       [0.3, 0.3, 0.3, 0.3],
+          filename:     `Informe_Entrenamientos_${startDate}_${endDate}.pdf`,
           image:        { type: 'jpeg', quality: 0.98 },
-          html2canvas:  { scale: 2, useCORS: true, logging: false, scrollX: 0, scrollY: 0 },
-          jsPDF:        { unit: 'px', format: [790, 1115], orientation: 'portrait' }
+          html2canvas:  { scale: 2, useCORS: true, logging: false },
+          jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+          pagebreak:    { mode: 'avoid-all' }
         };
 
         html2pdf().set(opt).from(element).save().then(() => {
-          element.style.position = 'absolute';
-          element.style.left = '-9999px';
-          element.style.top = '-9999px';
           closePdfDateModal();
-        }).catch(err => {
-          console.error(err);
-          element.style.position = 'absolute';
-          element.style.left = '-9999px';
-          element.style.top = '-9999px';
         });
-      }, 350);
+      }, 400);
+    }
+
+    function renderPdfCharts(labels, attendanceData, qualityData) {
+      if (attChartInstance) attChartInstance.destroy();
+      if (qualChartInstance) qualChartInstance.destroy();
+
+      const ctxAtt = document.getElementById('pdfAttendanceChart').getContext('2d');
+      attChartInstance = new Chart(ctxAtt, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Jugadoras Presentes',
+            data: attendanceData,
+            backgroundColor: '#3b82f6',
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: false,
+          animation: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+        }
+      });
+
+      const ctxQual = document.getElementById('pdfQualityChart').getContext('2d');
+      qualChartInstance = new Chart(ctxQual, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Media Estrellas',
+            data: qualityData,
+            borderColor: '#f59e0b',
+            backgroundColor: 'rgba(245, 158, 11, 0.15)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 3,
+            pointBackgroundColor: '#f59e0b'
+          }]
+        },
+        options: {
+          responsive: false,
+          animation: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { min: 0, max: 5, ticks: { stepSize: 1 } } }
+        }
+      });
     }
   </script>
 </body>
